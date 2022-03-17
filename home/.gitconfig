@@ -1,0 +1,8 @@
+[user]
+	name = Fabian Neuschmidt
+	email = fabian@neuschmidt.de
+
+[includeIf "gitdir/i:~/viperdev/"]
+  path = .gitconfig-viperdev
+[includeIf "gitdir/i:~/icadev/"]
+  path = .gitconfig-icarus
