@@ -1,0 +1,59 @@
+set ignorecase
+set smartcase
+set clipboard=unnamed
+set number
+set relativenumber
+set incsearch
+set hlsearch
+
+" vim functionality
+nmap <C-O> :vsc View.NavigateBackward<CR>
+nmap <C-I> :vsc View.NavigateForward<CR>
+nmap <C-l> :noh<CR>
+
+" editing
+nmap <Space>; A;<Esc>
+nnoremap gcc :vsc Edit.ToggleComment<CR>
+vnoremap gc :vsc Edit.ToggleComment<CR><Esc><Esc>
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap <Space><CR> <C-]>
+
+" actions
+nmap zl :so ~/.vsvimrc<CR>
+nmap <Space>b :vsc Build.BuildSolution<CR>
+
+" navigation and movement
+nmap <Space><Space> :vsc Edit.GoToAll<CR>
+nmap äi :vsc Edit.GoToNextIssueInFile<CR>
+nmap öi :vsc Edit.GoToPreviousIssueInFile<CR>
+nmap äe :vsc View.NextError<CR>
+nmap öe :vsc View.PreviousError<CR>
+nmap äm :vsc Edit.NextMethod<CR>
+nmap öm :vsc Edit.PreviousMethod<CR>
+nmap äf :vsc Window.NextDocumentWindow<CR>
+nmap öf :vsc Window.PreviousDocumentWindow<CR>
+
+"tooltips
+nmap <Space>i :vsc Edit.QuickInfo<CR>
+nmap <Space>p :vsc Edit.ParameterInfo<CR>
+
+" dialogs
+nmap <Space>o :vsc File.OpenFile<CR>
+nmap <Space>O :vsc File.OpenProject<CR>
+nmap <Space>q :vsc Window.QuickLaunch<CR>
+
+" tool windows
+nmap <Space>te :vsc TestExplorer.ShowTestExplorer<CR>
+nmap <Space>tt :vsc TestExplorer.RunAllTestsInContext<CR>
+nmap <Space>td :vsc TestExplorer.DebugAllTestsInContext<CR>
+nmap <Space>ta :vsc TestExplorer.RunAllTests<CR>
+
+nmap <Space>s :vsc View.SolutionExplorer<CR>
+nmap <Space>g :vsc View.GitWindow<CR>
+nmap <Space>e :vsc View.ErrorList<CR>
+nmap <Space>l :vsc View.Output<CR>
+nmap <Space>r :vsc Edit.FindAllReferences<CR>
+
+" debugging
+nmap <Space>dx :vsc Debug.StopDebugging<CR>

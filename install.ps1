@@ -1,0 +1,1 @@
+Copy-Item -Path ./home/** -Destination $home -Include **
