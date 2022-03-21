@@ -198,14 +198,14 @@ xmap ö [
 xmap ä ]
 
 " git
-nnoremap <Leader>ga :Gwrite<CR>
-nnoremap <Leader>gsh :Gpush<CR>
-nnoremap <Leader>gll :Gpull<CR>
+nnoremap <Leader>ga :Git write<CR>
+nnoremap <Leader>gsh :Git push<CR>
+nnoremap <Leader>gll :Git pull<CR>
 nnoremap <Leader>gg :Git<CR>
-nnoremap <Leader>gb :Gblame<CR>
-nnoremap <Leader>gd :Gvdiff<CR>
-nnoremap <Leader>ge :Gedit<CR>
-nnoremap <Leader>go :Gbrowse<CR>
+nnoremap <Leader>gb :Git blame<CR>
+nnoremap <Leader>gd :Git vdiff<CR>
+nnoremap <Leader>ge :Git edit<CR>
+nnoremap <Leader>go :Git browse<CR>
 
 " completion:
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
