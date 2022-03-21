@@ -1,8 +1,10 @@
 [user]
-	name = Fabian Neuschmidt
-	email = fabian@neuschmidt.de
+  name = Fabian Neuschmidt
+  email = fabian@neuschmidt.de
 
 [includeIf "gitdir/i:~/viperdev/"]
   path = .gitconfig-viperdev
 [includeIf "gitdir/i:~/icadev/"]
   path = .gitconfig-icarus
+[core]
+	editor = 'C:\\Windows\\gvim.bat' -f -i NONE
