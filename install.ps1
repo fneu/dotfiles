@@ -1,1 +1,2 @@
-Copy-Item -Path ./home/** -Destination $home -Include **
+robocopy ./home $home /s /xx
+robocopy ./nvim $home/AppData/Local/nvim /s /xx
