@@ -7,4 +7,4 @@
 [includeIf "gitdir/i:~/icadev/"]
   path = .gitconfig-icarus
 [core]
-	editor = 'C:\\Windows\\gvim.bat' -f -i NONE
+  editor = nvim-qt
