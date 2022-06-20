@@ -1,6 +1,7 @@
 local PKGS = {
     'savq/paq-nvim';                  -- Let Paq manage itself
-    'mhartington/oceanic-next';       -- Colorscheme
+    'equalsraf/neovim-gui-shim';      -- gui commands for nvim-qt
+    'EdenEast/nightfox.nvim';         -- colorscheme
 }
 
 -- bootstrap package manager if required
