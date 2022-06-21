@@ -1,6 +1,5 @@
 local PKGS = {
     'savq/paq-nvim';                  -- Let Paq manage itself
-    'equalsraf/neovim-gui-shim';      -- gui commands for nvim-qt
     'EdenEast/nightfox.nvim';         -- colorscheme
     {'nvim-treesitter/nvim-treesitter', run=TSUpdate};
 }

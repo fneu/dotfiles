@@ -7,6 +7,7 @@ require('nightfox').setup({
     }
 })
 vim.cmd("colorscheme nightfox")
+vim.opt.guifont="MonoLisa:h10"
 
 -- behaviour
 
