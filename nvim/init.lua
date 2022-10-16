@@ -1,7 +1,13 @@
-require('fne.options')
-require('fne.plugins')
-require('fne.netrw')
-
+-- load files from /lua folder
+-- they should start with a 2-digit number
+-- lower numbers are loaded first
+for _, path in pairs(vim.fn.glob(vim.fn.stdpath('config')..'/lua/*', 0, 1)) do
+    filename, _ = path:gsub('\\', '/')
+    filename = filename:match('.+/(%d%d%-.*).lua$')
+    if filename then
+        require(filename)
+    end
+end
 
 vim.g.mapleader = " "
 
@@ -9,8 +15,10 @@ vim.g.mapleader = " "
 vim.keymap.set('n', '<leader>ri', '<cmd>lua reload_config()<CR>', {desc = 'Reload init.lua'})
 
 function _G.reload_config()
+  -- all packages starting with 00- to 99- will be reloaded, and init.lua will be reread.
+  -- this might fail to update some plugin configs as their packages will not be reloaded
   for name,_ in pairs(package.loaded) do
-    if name:match('^fne') then
+    if name:match('^%d%d%-') then
       package.loaded[name] = nil
     end
   end
