@@ -1,16 +1,3 @@
--- theme
-require('nightfox').setup({
-    options = {
-        styles = {
-            comments="italic"
-	}
-    }
-})
-vim.cmd("colorscheme nightfox")
-vim.opt.guifont="MonoLisa:h10"
-
--- behaviour
-
 vim.wo.foldmethod='expr'
 vim.wo.foldexpr='nvim_treesitter#foldexpr()'
 

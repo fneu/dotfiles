@@ -1,6 +1,7 @@
 local PKGS = {
-    'savq/paq-nvim';                  -- Let Paq manage itself
-    'EdenEast/nightfox.nvim';         -- colorscheme
+    'savq/paq-nvim';                  -- let Paq manage itself
+    'mcchrish/zenbones.nvim';         -- colorscheme
+    'rktjmp/lush.nvim';               -- customize zenbones
     {'nvim-treesitter/nvim-treesitter', run=TSUpdate};
 }
 
