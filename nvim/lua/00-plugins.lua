@@ -1,5 +1,6 @@
 local PKGS = {
     'savq/paq-nvim';                  -- let Paq manage itself
+    'equalsraf/neovim-gui-shim';      -- reliably load :Gui... commands on nvim-qt
     'mcchrish/zenbones.nvim';         -- colorscheme
     'rktjmp/lush.nvim';               -- customize zenbones
     {'nvim-treesitter/nvim-treesitter', run=TSUpdate};
