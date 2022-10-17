@@ -1,2 +1,2 @@
-GuiFont MonoLisa:h11
+GuiFont MonoLisa:h8
 GuiRenderLigatures 1
