@@ -1,3 +1,4 @@
+vim.g.mapleader = " "
 -- load files from /lua folder
 -- they should start with a 2-digit number
 -- lower numbers are loaded first
@@ -9,7 +10,6 @@ for _, path in pairs(vim.fn.glob(vim.fn.stdpath('config')..'/lua/*', 0, 1)) do
     end
 end
 
-vim.g.mapleader = " "
 
 -- Highlight on yank
 local yankGrp = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
