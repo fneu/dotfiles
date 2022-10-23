@@ -4,6 +4,8 @@ local PKGS = {
     'mcchrish/zenbones.nvim';         -- colorscheme
     'rktjmp/lush.nvim';               -- customize zenbones
     'ggandor/leap.nvim';              -- movement
+    'brenoprata10/nvim-highlight-colors';
+    'p00f/nvim-ts-rainbow';           -- colored parentheses
     {'nvim-treesitter/nvim-treesitter', run=TSUpdate};
 }
 
@@ -38,5 +40,14 @@ require 'nvim-treesitter.configs'.setup {
     },
     indent = {
         enable = true
+    },
+    rainbow = {
+        enable = true,
+        colors = {
+            '#A8334C', '#4F6C31', '#944927', '#286486',
+            '#88507D', '#3B8992', '#2C363C', '#94253E',
+            '#3F5A22', '#803D1C', '#1D5573', '#7B3B70',
+            '#2B747C', '#4F5E68'
+        }
     }
 }
