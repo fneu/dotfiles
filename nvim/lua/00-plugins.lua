@@ -6,6 +6,7 @@ local PKGS = {
     'ggandor/leap.nvim';              -- movement
     'brenoprata10/nvim-highlight-colors';
     'p00f/nvim-ts-rainbow';           -- colored parentheses
+    'tpope/vim-fugitive';
     {'nvim-treesitter/nvim-treesitter', run=TSUpdate};
 }
 
