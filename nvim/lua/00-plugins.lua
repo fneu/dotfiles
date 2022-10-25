@@ -25,7 +25,7 @@ end
 
 -- treesitter
 require 'nvim-treesitter.configs'.setup {
-    ensure_installed = {"c_sharp", "python", "lua"},
+    ensure_installed = {"c_sharp", "python", "lua", "json", "markdown"},
     highlight = {
         enable = true,
     },
