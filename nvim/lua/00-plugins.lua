@@ -8,6 +8,10 @@ local PKGS = {
     'p00f/nvim-ts-rainbow';           -- colored parentheses
     'tpope/vim-fugitive';
     {'nvim-treesitter/nvim-treesitter', run=TSUpdate};
+    {'nvim-neo-tree/neo-tree.nvim', branch='v2.x'};
+    'nvim-lua/plenary.nvim';
+    'kyazdani42/nvim-web-devicons';
+    'MunifTanjim/nui.nvim';
 }
 
 -- bootstrap package manager if required
