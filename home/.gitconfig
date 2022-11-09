@@ -7,4 +7,4 @@
 [includeIf "gitdir/i:~/icadev/"]
   path = .gitconfig-icarus
 [core]
-  editor = neovide --nofork
+  editor = nvim
