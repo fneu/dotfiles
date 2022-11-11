@@ -41,7 +41,7 @@ vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 vim.keymap.set('n', '<leader>fj', builtin.jumplist, {})
 
-vim.keymap.set('n', '<leader>fc', builtin.git_branches, {})
-vim.keymap.set('n', '<leader>fs', builtin.git_stash, {})
+vim.keymap.set('n', '<leader>gb', builtin.git_branches, {})
+vim.keymap.set('n', '<leader>gs', builtin.git_stash, {})
 
 vim.keymap.set('n', '<leader>ft', builtin.treesitter, {})

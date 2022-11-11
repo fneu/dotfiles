@@ -19,6 +19,8 @@ local PKGS = {
     'p00f/nvim-ts-rainbow';
     -- git
     'tpope/vim-fugitive';
+    -- git blame popup
+    'rhysd/git-messenger.vim';
     -- language understanding through syntax trees
     -- integrates with multiple other plugins
     {'nvim-treesitter/nvim-treesitter', run=TSUpdate};
