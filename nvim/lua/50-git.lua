@@ -9,6 +9,9 @@ vim.keymap.set('n', '<leader>gd', ':Gvdiffsplit<cr>', {})
 vim.keymap.set('n', '<leader>gD', ':Git difftool<cr>', {})
 vim.keymap.set('n', '<leader>gM', ':Git mergetool<cr>', {})
 
+vim.keymap.set('n', '<leader>gp', ':Git pull<cr>', {})
+vim.keymap.set('n', '<leader>gP', ':Git push<cr>', {})
+
 -- GitMessenger
 vim.g.git_messenger_no_default_mappings = true
 vim.keymap.set('n', '<leader>gk', '<Plug>(git-messenger)', {})
