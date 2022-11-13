@@ -29,6 +29,7 @@ local PKGS = {
     -- this copys and pastes easy, which netrw cannot do without customization on windows
     -- git support is mediocre, cannot show new unstanged changes in a staged file
     {'nvim-neo-tree/neo-tree.nvim', branch='v2.x'};
+    'nvim-tree/nvim-tree.lua';
     -- necessary for neotree
     'MunifTanjim/nui.nvim';
     -- necessary lua functions for neotree and telescope
