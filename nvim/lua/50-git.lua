@@ -13,6 +13,7 @@ vim.keymap.set('n', '<leader>gp', ':Git pull<cr>', {})
 vim.keymap.set('n', '<leader>gP', ':Git push<cr>', {})
 
 -- GitMessenger
+vim.cmd("let g:git_messenger_floating_win_opts = { 'border': 'single',}")
 vim.g.git_messenger_no_default_mappings = true
 vim.keymap.set('n', '<leader>gk', '<Plug>(git-messenger)', {})
 
