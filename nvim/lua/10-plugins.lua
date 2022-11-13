@@ -39,6 +39,10 @@ local PKGS = {
     {'nvim-telescope/telescope.nvim', branch='0.1.x'};
     -- faster filtering for telescope
     {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }; -- scoop install make mingw
+    -- structural search and replace
+    'cshuaimin/ssr.nvim';
+    -- vertical indentation guides
+    'lukas-reineke/indent-blankline.nvim';
 }
 
 -- bootstrap package manager if required
