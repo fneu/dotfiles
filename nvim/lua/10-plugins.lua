@@ -25,11 +25,12 @@ local PKGS = {
     -- integrates with multiple other plugins
     {'nvim-treesitter/nvim-treesitter', run=TSUpdate};
     -- File tree
-    -- TODO: decide between this, netrw, vinegar, and maybe telescope-something?
-    -- this copys and pastes easy, which netrw cannot do without customization on windows
-    -- git support is mediocre, cannot show new unstanged changes in a staged file
+    -- alternative file trees:
+    --  - nvim-tree: performance issues on windows, cannot copy multiple files, less clear git status
+    --  - netrw/vinegar: needs setup to copy on windows
+    --  - dirbuf: great, but simple
+    --  - telescope-file-browser: need to check it out again, copying was complicated
     {'nvim-neo-tree/neo-tree.nvim', branch='v2.x'};
-    'nvim-tree/nvim-tree.lua';
     -- necessary for neotree
     'MunifTanjim/nui.nvim';
     -- necessary lua functions for neotree and telescope
