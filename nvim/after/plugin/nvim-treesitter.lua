@@ -1,5 +1,10 @@
+local ok, configs = pcall(require, "nvim-treesitter.configs")
+if not ok then
+    return
+end
+
 -- treesitter
-require 'nvim-treesitter.configs'.setup {
+configs.setup {
     ensure_installed = {"c_sharp", "python", "lua", "vim", "json", "markdown", "help"},
     highlight = {
         enable = true,

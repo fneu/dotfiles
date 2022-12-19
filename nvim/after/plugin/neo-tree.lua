@@ -1,5 +1,10 @@
+local ok, neotree = pcall(require, "neo-tree")
+if not ok then
+    return
+end
+
 vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
-require("neo-tree").setup({
+neotree.setup({
     sources = {
         "filesystem",
         "git_status",
@@ -17,14 +22,14 @@ require("neo-tree").setup({
             highlight = "NeoTreeModified",
         },
         name = {
-            trailing_slash = false,
-            use_git_status_colors = false,
+            trailing_slash = true,
+            use_git_status_colors = true,
             highlight = "NeoTreeFileName",
         },
         git_status = {
             symbols = {
                 -- Change type
-                added     = "", -- NOTE: you can set any of these to an empty string to not show them
+                added     = "",
                 deleted   = "",
                 modified  = "",
                 renamed   = "",
@@ -37,6 +42,50 @@ require("neo-tree").setup({
             },
             align = "right",
         },
+    },
+    renderers = {
+        directory = {
+            { "indent" },
+            { "icon" },
+            { "current_filter" },
+            {
+                "container",
+                content = {
+                    { "name", zindex = 10, use_git_status_colors=false},
+                    { "clipboard", zindex = 10 },
+                    { "diagnostics", errors_only = true, zindex = 20, align = "right", hide_when_expanded = true },
+                    { "git_status", zindex = 20, align = "right", hide_when_expanded = true },
+                },
+            },
+        },
+        file = {
+            { "indent" },
+            { "icon" },
+            {
+                "container",
+                content = {
+                    {
+                        "name",
+                        zindex = 10
+                    },
+                    { "clipboard", zindex = 10 },
+                    { "bufnr", zindex = 10 },
+                    { "modified", zindex = 20, align = "right" },
+                    { "diagnostics",  zindex = 20, align = "right" },
+                    { "git_status", zindex = 20, align = "right" },
+                },
+            },
+        },
+        message = {
+            { "indent", with_markers = false },
+            { "name", highlight = "NeoTreeMessage" },
+        },
+        terminal = {
+            { "indent" },
+            { "icon" },
+            { "name" },
+            { "bufnr" }
+        }
     },
     window = { -- see https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/popup for
         mappings = {
