@@ -26,6 +26,8 @@ local specs = lush.parse(function()
         NeoTreeVertSplit {base.NvimTreeWinSeparator},
         NeoTreeWinSeparator {base.NvimTreeWinSeparator},     
         NeoTreeWindowsHidden {base.Comment},
+        NeoTreeFloatTitle {base.FloatBorder},
+        NeoTreeFloatBorder {base.FloatBorder},
     }
 end)
 -- Apply specs using lush tool-chain
