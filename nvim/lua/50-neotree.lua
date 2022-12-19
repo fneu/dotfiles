@@ -194,9 +194,9 @@ require("neo-tree").setup({
             expander_highlight = "NeoTreeExpander",
         },
         icon = {
-            folder_closed = "",
-            folder_open = "",
-            folder_empty = "ﰊ",
+            folder_closed = "",
+            folder_open = "",
+            folder_empty = "",
             -- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
             -- then these will never be used.
             default = "*",
@@ -214,9 +214,9 @@ require("neo-tree").setup({
         git_status = {
             symbols = {
                 -- Change type
-                added     = "✚", -- NOTE: you can set any of these to an empty string to not show them
-                deleted   = "✖",
-                modified  = "",
+                added     = "", -- NOTE: you can set any of these to an empty string to not show them
+                deleted   = "",
+                modified  = "",
                 renamed   = "",
                 -- Status type
                 untracked = "",
@@ -232,45 +232,45 @@ require("neo-tree").setup({
         directory = {
             { "indent" },
             { "icon" },
-{ "current_filter" },
-{
-"container",
-content = {
-    { "name", zindex = 10 },
--- {
---   "symlink_target",
---   zindex = 10,
---   highlight = "NeoTreeSymbolicLinkTarget",
--- },
-{ "clipboard", zindex = 10 },
-{ "diagnostics", errors_only = true, zindex = 20, align = "right", hide_when_expanded = true },
-{ "git_status", zindex = 20, align = "right", hide_when_expanded = true },
-},
-},
-        },
-        file = {
-    { "indent" },
-{ "icon" },
-{
-"container",
-content = {
-                    {
-"name",
-                        zindex = 10
-},
--- {
---   "symlink_target",
+            { "current_filter" },
+            {
+                "container",
+                content = {
+                    { "name", zindex = 10 },
+                    -- {
+                    --   "symlink_target",
                     --   zindex = 10,
                     --   highlight = "NeoTreeSymbolicLinkTarget",
                     -- },
-{ "clipboard", zindex = 10 },
-                    { "bufnr", zindex = 10 },
-{ "modified", zindex = 20, align = "right" },
-{ "diagnostics",  zindex = 20, align = "right" },
-{ "git_status", zindex = 20, align = "right" },
-},
+                    { "clipboard", zindex = 10 },
+                    { "diagnostics", errors_only = true, zindex = 20, align = "right", hide_when_expanded = true },
+                    { "git_status", zindex = 20, align = "right", hide_when_expanded = true },
+                },
             },
-},
+        },
+        file = {
+            { "indent" },
+            { "icon" },
+            {
+                "container",
+                content = {
+                    {
+                        "name",
+                        zindex = 10
+                    },
+                    -- {
+                    --   "symlink_target",
+                    --   zindex = 10,
+                    --   highlight = "NeoTreeSymbolicLinkTarget",
+                    -- },
+                    { "clipboard", zindex = 10 },
+                    { "bufnr", zindex = 10 },
+                    { "modified", zindex = 20, align = "right" },
+                    { "diagnostics",  zindex = 20, align = "right" },
+                    { "git_status", zindex = 20, align = "right" },
+                },
+            },
+        },
         message = {
             { "indent", with_markers = false },
             { "name", highlight = "NeoTreeMessage" },
@@ -355,55 +355,55 @@ content = {
                 ["D"] = "fuzzy_finder_directory",
                 --["/"] = "filter_as_you_type", -- this was the default until v1.28
                 ["f"] = "filter_on_submit",
-["<C-x>"] = "clear_filter",
-["<bs>"] = "navigate_up",
-["."] = "set_root",
-["[g"] = "prev_git_modified",
-["]g"] = "next_git_modified",
-}
-},
-async_directory_scan = "auto", -- "auto"   means refreshes are async, but it's synchronous when called from the Neotree commands.
--- "always" means directory scans are always async.
--- "never"  means directory scans are never async.
-bind_to_cwd = true, -- true creates a 2-way binding between vim's cwd and neo-tree's root
-cwd_target = {
-    sidebar = "tab",   -- sidebar is when position = left or right
-current = "window" -- current is when position = current
+                ["<C-x>"] = "clear_filter",
+                ["<bs>"] = "navigate_up",
+                ["."] = "set_root",
+                ["[g"] = "prev_git_modified",
+                ["]g"] = "next_git_modified",
+            }
         },
--- The renderer section provides the renderers that will be used to render the tree.
+        async_directory_scan = "auto", -- "auto"   means refreshes are async, but it's synchronous when called from the Neotree commands.
+        -- "always" means directory scans are always async.
+        -- "never"  means directory scans are never async.
+        bind_to_cwd = false, -- true creates a 2-way binding between vim's cwd and neo-tree's root
+        cwd_target = {
+            sidebar = "tab",   -- sidebar is when position = left or right
+            current = "window" -- current is when position = current
+        },
+        -- The renderer section provides the renderers that will be used to render the tree.
         --   The first level is the node type.
---   For each node type, you can specify a list of components to render.
---       Components are rendered in the order they are specified.
---         The first field in each component is the name of the function to call.
---         The rest of the fields are passed to the function as the "config" argument.
-filtered_items = {
-    visible = false, -- when true, they will just be displayed differently than normal items
-force_visible_in_empty_folder = false, -- when true, hidden files will be shown if the root folder is otherwise empty
-show_hidden_count = true, -- when true, the number of hidden items in each folder will be shown as the last entry
-hide_dotfiles = true,
-hide_gitignored = true,
-hide_hidden = true, -- only works on Windows for hidden files/directories
+        --   For each node type, you can specify a list of components to render.
+        --       Components are rendered in the order they are specified.
+        --         The first field in each component is the name of the function to call.
+        --         The rest of the fields are passed to the function as the "config" argument.
+        filtered_items = {
+            visible = false, -- when true, they will just be displayed differently than normal items
+            force_visible_in_empty_folder = false, -- when true, hidden files will be shown if the root folder is otherwise empty
+            show_hidden_count = true, -- when true, the number of hidden items in each folder will be shown as the last entry
+            hide_dotfiles = true,
+            hide_gitignored = true,
+            hide_hidden = true, -- only works on Windows for hidden files/directories
             hide_by_name = {
                 ".DS_Store",
-"thumbs.db"
---"node_modules",
-},
+                "thumbs.db"
+                --"node_modules",
+            },
             hide_by_pattern = { -- uses glob style patterns
-    --"*.meta",
---"*/src/*/tsconfig.json"
-},
-always_show = { -- remains visible even if other settings would normally hide it
+                --"*.meta",
+                --"*/src/*/tsconfig.json"
+            },
+            always_show = { -- remains visible even if other settings would normally hide it
                 --".gitignored",
-},
+            },
             never_show = { -- remains hidden even if visible is toggled to true, this overrides always_show
-    --".DS_Store",
---"thumbs.db"
-},
+                --".DS_Store",
+                --"thumbs.db"
+            },
             never_show_by_pattern = { -- uses glob style patterns
                 --".null-ls_*",
-},
+            },
         },
-find_by_full_path_words = false,  -- `false` means it only searches the tail of a path.
+        find_by_full_path_words = false,  -- `false` means it only searches the tail of a path.
         -- `true` will change the filter into a full path
         -- search with space as an implicit ".*", so
         -- `fi init`
@@ -438,7 +438,7 @@ find_by_full_path_words = false,  -- `false` means it only searches the tail of 
         --end,
         group_empty_dirs = false, -- when true, empty folders will be grouped together
         search_limit = 50, -- max number of search results when using filters
-        follow_current_file = false, -- This will find and focus the file in the active buffer every time
+        follow_current_file = true, -- This will find and focus the file in the active buffer every time
         -- the current file is changed while the tree is open.
         hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
         -- in whatever position is specified in window.position

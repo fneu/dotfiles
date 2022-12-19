@@ -12,19 +12,20 @@ local specs = lush.parse(function()
 
         DevIconDefault {base.Type},
 
-        NeoTreeCursorLine {base.NvimTreeCursorLine},         --|hl-CursorLine| override in Neo-tree window.
+        NeoTreeCursorLine {base.NvimTreeCursorLine},
+        NeoTreeDimText {base.Comment},
         NeoTreeDirectoryIcon {base.Type},
         NeoTreeDirectoryName {base.Directory},
-        NeoTreeGitConflict {base.WarningMsg},        --File name when the git status is conflict.
-        NeoTreeGitUntracked {base.Comment},       --File name when the git status is untracked.
-        NeoTreeGitModified {base.diffChanged},       --File name when the git status is untracked.
-        NeoTreeNormal { base.NvimTreeNormal},             --|hl-Normal| override in Neo-tree window.
-        NeoTreeVertSplit {base.NvimTreeWinSeparator},          --|hl-VertSplit| override in Neo-tree window.
+        NeoTreeGitConflict {base.WarningMsg},
+        NeoTreeGitModified {base.diffChanged},
+        NeoTreeGitUntracked {base.Comment},
+        NeoTreeModified {base.diffChanged},
+        NeoTreeNormal { base.NvimTreeNormal},
+        NeoTreeRootName {base.NvimTreeRootFolder},
+        NeoTreeSymbolicLinkTarget {base.NvimTreeSymlink},
+        NeoTreeVertSplit {base.NvimTreeWinSeparator},
         NeoTreeWinSeparator {base.NvimTreeWinSeparator},     
-        NeoTreeRootName {base.NvimTreeRootFolder},           --The name of the root node.
-        NeoTreeSymbolicLinkTarget {base.NvimTreeSymlink}, --Symbolic link target.
-        NeoTreeWindowsHidden {base.Comment},      --Used for icons and names that are hidden on Windows.
-        NeoTreeDimText {base.Comment}
+        NeoTreeWindowsHidden {base.Comment},
     }
 end)
 -- Apply specs using lush tool-chain
