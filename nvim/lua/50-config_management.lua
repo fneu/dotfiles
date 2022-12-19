@@ -32,5 +32,5 @@ vim.keymap.set(
 vim.keymap.set(
     'n',
     '<leader>ie',
-    '<cmd>e '..find_dotfiles()..'/nvim/lua<CR>', 
+    '<cmd>e '..find_dotfiles()..'\\nvim\\lua<CR>', 
     {desc = 'Edit nvim config in dotfiles'})
