@@ -35,10 +35,10 @@ neotree.setup({
                 renamed   = "",
                 -- Status type
                 untracked = "",
-                ignored   = "",
+                ignored   = "",
                 unstaged  = "",
-                staged    = "",
-                conflict  = "",
+                staged    = "",
+                conflict  = "",
             },
             align = "right",
         },
