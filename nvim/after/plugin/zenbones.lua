@@ -8,8 +8,6 @@ if not ok2 then
     return
 end
 
-vim.o.termguicolors = true
-vim.o.background="light"
 vim.cmd("colorscheme zenbones")
 
 local specs = lush.parse(function()

@@ -8,6 +8,10 @@ configs.setup {
     ensure_installed = {"c_sharp", "python", "lua", "vim", "json", "markdown", "help"},
     highlight = {
         enable = true,
+
+        -- as there is no treesitter syntax for xml available yet,
+        -- this is necessary for xml folding
+        additional_vim_regex_highlighting = {"xml",}
     },
     incremental_selection = {
         enable = true,
@@ -25,3 +29,6 @@ configs.setup {
         enable = true
     }
 }
+
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'

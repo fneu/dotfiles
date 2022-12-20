@@ -13,11 +13,3 @@ vim.api.nvim_create_autocmd(
     command = "startinsert",
     group = termGrp,
 })
-
--- Open all folds on buffer entry
-local foldGrp = vim.api.nvim_create_augroup("OpenFolds", { clear = true })
-vim.api.nvim_create_autocmd(
-    {"BufWinEnter"}, {
-    command = "normal zR",
-    group = foldGrp,
-})
