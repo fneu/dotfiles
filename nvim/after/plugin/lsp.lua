@@ -5,9 +5,11 @@ end
 
 lsp.preset('recommended')
 lsp.ensure_installed({
-    'pyright',
-    'omnisharp',
-    'sumneko_lua',
+    'marksman', -- markdown
+    'pylsp', --python
+    'omnisharp', --c_sharp
+    'lemminx', --xml
+    'sumneko_lua', --lua
 })
 lsp.configure('sumneko_lua', {
     settings = {
