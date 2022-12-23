@@ -8,6 +8,7 @@ vim.keymap.set('n', '<leader>gr', ':GRename ', {})
 vim.keymap.set('n', '<leader>gm', ':GMove <C-r>%', {})
 vim.keymap.set('n', '<leader>gx', ':GRemove<cr>', {})
 vim.keymap.set('n', '<leader>gw', ':Gwrite!<cr>', {})
+vim.keymap.set('n', '<leader>gc', ':Git commit<cr>', {})
 vim.keymap.set('n', '<leader>gd', ':Gvdiffsplit<cr>', {})
 
 vim.keymap.set('n', '<leader>gD', ':Git difftool<cr>', {})
