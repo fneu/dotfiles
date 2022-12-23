@@ -1,5 +1,5 @@
 vim.g.mapleader = " "
-    
+
 vim.keymap.set('n', '<leader>ie', '<cmd>e '..find_dotfiles()..'\\nvim<CR>')
 vim.keymap.set('n', '<leader>ii', '<cmd>lua copy_config()<CR>')
 

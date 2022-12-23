@@ -15,11 +15,11 @@ configs.setup {
     },
     incremental_selection = {
         enable = true,
+        disable = {'help'},
         keymaps = {
             init_selection = "<CR>",
-            scope_incremental = "<CR>",
-            node_incremental = "<TAB>",
-            node_decremental = "<S-TAB>",
+            node_incremental = "<CR>",
+            node_decremental = "<S-CR>",
         },
     },
     indent = {
