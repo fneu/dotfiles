@@ -202,3 +202,6 @@ neotree.setup({
         },
     },
 })
+
+vim.keymap.set('n', '-', ':Neotree<CR>')
+
