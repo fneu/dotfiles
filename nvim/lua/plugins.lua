@@ -95,6 +95,9 @@ require("packer").startup(function(use)
         }
     }
 
+    -- lsp status
+    use 'j-hui/fidget.nvim'
+
 
     if is_bootstrap then
         require("packer").sync()
