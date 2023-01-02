@@ -20,6 +20,7 @@ configs.setup {
             init_selection = "<CR>",
             node_incremental = "<CR>",
             node_decremental = "<S-CR>",
+            scope_incremental = '<C-s>',
         },
     },
     indent = {

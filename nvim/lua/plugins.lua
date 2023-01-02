@@ -78,6 +78,8 @@ require("packer").startup(function(use)
             {'neovim/nvim-lspconfig'},
             {'williamboman/mason.nvim'},
             {'williamboman/mason-lspconfig.nvim'},
+            {'Issafalcon/lsp-overloads.nvim'}, -- show multiple constructors in signature help
+            {'Hoffs/omnisharp-extended-lsp.nvim'}, -- go to definition in nugets/system dlls
 
             -- Autocompletion
             {'hrsh7th/nvim-cmp'},
