@@ -104,11 +104,19 @@ require("packer").startup(function(use)
     use 'j-hui/fidget.nvim'
 
     -- this supports block comments that mini.comment doesn't
+    -- this supports i.e. word comments that mini.comment doesn't, useful for commenting out parameters with `gcaa` etc
     -- mini.comment includes a `gc` textobject that this doesn't
     use {
         'numToStr/Comment.nvim',
         config = function()
             require('Comment').setup()
+        end
+    }
+
+    use {
+        "windwp/nvim-autopairs",
+        config = function()
+            require("nvim-autopairs").setup {}
         end
     }
 
