@@ -7,7 +7,6 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 neotree.setup({
     sources = {
         "filesystem",
-        "git_status",
     },
     popup_border_style = "rounded", -- "double", "none", "rounded", "shadow", "single" or "solid" and apparently "NC"
     -- source_selector provides clickable tabs to switch between sources.
@@ -144,6 +143,13 @@ neotree.setup({
                 ["."] = "set_root",
                 ["[g"] = "prev_git_modified",
                 ["]g"] = "next_git_modified",
+
+                ["gs"] = "git_add_file",
+                ["gS"] = "git_add_all",
+                ["gu"] = "git_unstage_file",
+                ["gX"] = "git_revert_file",
+                ["gcc"] = "git_commit",
+                ["gP"] = "git_push",
             }
         },
         async_directory_scan = "auto", -- "auto"   means refreshes are async, but it's synchronous when called from the Neotree commands.
@@ -187,19 +193,6 @@ neotree.setup({
         -- "disabled",    -- netrw left alone, neo-tree does not handle opening dirs
         use_libuv_file_watcher = false, -- This will use the OS level file watchers to detect changes
         -- instead of relying on nvim autocmd events.
-    },
-    git_status = {
-        window = {
-            mappings = {
-                ["A"] = "git_add_all",
-                ["gu"] = "git_unstage_file",
-                ["ga"] = "git_add_file",
-                ["gr"] = "git_revert_file",
-                ["gc"] = "git_commit",
-                ["gp"] = "git_push",
-                ["gg"] = "git_commit_and_push",
-            },
-        },
     },
 })
 
