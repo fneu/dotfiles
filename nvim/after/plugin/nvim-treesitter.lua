@@ -28,7 +28,60 @@ configs.setup {
     },
     rainbow = {
         enable = true
-    }
+    },
+    textobjects = {
+        select = {
+            enable = true,
+            lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+            keymaps = {
+                -- You can use the capture groups defined in textobjects.scm
+                ['aa'] = '@parameter.outer',
+                ['ia'] = '@parameter.inner',
+                ['af'] = '@function.outer',
+                ['if'] = '@function.inner',
+                ['ac'] = '@class.outer',
+                ['ic'] = '@class.inner',
+                ['agc'] = '@comment.outer',
+            },
+        },
+        move = {
+            enable = true,
+            set_jumps = true, -- whether to set jumps in the jumplist
+            goto_next_start = {
+                [']f'] = '@function.outer',
+                [']c'] = '@class.outer',
+                [']a'] = '@parameter.inner',
+                [']gc'] = '@comment.outer',
+            },
+            goto_next_end = {
+                [']F'] = '@function.outer',
+                [']C'] = '@class.outer',
+                [']A'] = '@parameter.inner',
+                [']GC'] = '@comment.outer',
+            },
+            goto_previous_start = {
+                ['[f'] = '@function.outer',
+                ['[c'] = '@class.outer',
+                ['[a'] = '@parameter.inner',
+                ['[gc'] = '@comment.outer',
+            },
+            goto_previous_end = {
+                ['[F'] = '@function.outer',
+                ['[C'] = '@class.outer',
+                ['[A'] = '@parameter.inner',
+                ['[GC'] = '@comment.outer',
+            },
+        },
+        swap = {
+            enable = true,
+            swap_next = {
+                ['<leader>a'] = '@parameter.inner',
+            },
+            swap_previous = {
+                ['<leader>A'] = '@parameter.inner',
+            },
+        },
+    },
 }
 
 vim.wo.foldmethod = 'expr'
