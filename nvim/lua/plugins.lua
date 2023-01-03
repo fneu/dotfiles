@@ -98,6 +98,14 @@ require("packer").startup(function(use)
     -- lsp status
     use 'j-hui/fidget.nvim'
 
+    -- this supports block comments that mini.comment doesn't
+    -- mini.comment includes a `gc` textobject that this doesn't
+    use {
+        'numToStr/Comment.nvim',
+        config = function()
+            require('Comment').setup()
+        end
+    }
 
     if is_bootstrap then
         require("packer").sync()
