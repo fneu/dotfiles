@@ -28,10 +28,8 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 vim.keymap.set('n', 'n', 'nzzzv', {desc="search [N]ext and center"})
 vim.keymap.set('n', 'N', 'Nzzzv', {desc="search previous and center"})
 
--- copying and pasting
+-- pasting
 vim.keymap.set('x', '<leader>p', '\"_dP', {desc="[P]aste without altering registers"})
-vim.keymap.set('n', '<leader>d', '\"_d', {desc="[D]elete without altering registers"})
-vim.keymap.set('v', '<leader>d', '\"_d', {desc="[D]elete without altering registers"})
 
 -- edit and apply config in dotfiles repo
 vim.keymap.set('n', '<leader>ei', '<cmd>e '..find_dotfiles()..'\\nvim<CR>', {desc="[E]dit [I]nit.lua"})
