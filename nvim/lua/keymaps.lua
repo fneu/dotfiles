@@ -30,6 +30,7 @@ vim.keymap.set('n', 'N', 'Nzzzv', {desc="search previous and center"})
 
 -- pasting
 vim.keymap.set('x', '<leader>p', '\"_dP', {desc="[P]aste without altering registers"})
+vim.keymap.set('n', 'gV', [['`[' . strpart(getregtype(), 0, 1) . '`]']], {expr=true, desc="select last inserted/pasted text"})
 
 -- edit and apply config in dotfiles repo
 vim.keymap.set('n', '<leader>ei', '<cmd>e '..find_dotfiles()..'\\nvim<CR>', {desc="[E]dit [I]nit.lua"})
