@@ -43,6 +43,7 @@ vim.keymap.set('n', '<M-l>', '<cmd>vertical resize +2<CR>')
 -- edit and apply config in dotfiles repo
 vim.keymap.set('n', '<leader>ei', '<cmd>e '..find_dotfiles()..'\\nvim<CR>', {desc="[E]dit [I]nit.lua"})
 vim.keymap.set('n', '<leader>ii', '<cmd>lua copy_config()<CR>', {desc="[I]nstall [I]nit.lua"})
+vim.keymap.set('n', '<leader>is', '<cmd>source ~/AppData/Local/nvim/after/plugin/luasnip.lua<CR>', {desc="[I]nstall [S]nippets"})
 
 -- make terminal mode and movement less weird
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')

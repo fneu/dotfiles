@@ -115,11 +115,14 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
     end, {'i', 's'}),
 
     -- when menu is visible, navigate to previous item on list
+    -- else, iterate luasnip choices if present
     -- else, jump backwards in snippet if possible
     -- else, revert to default behavior
     ['<S-Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
             cmp.select_prev_item(cmp_select_opts)
+        elseif luasnip.choice_active() then
+            luasnip.change_choice(1)
         elseif luasnip.jumpable(-1) then
             luasnip.jump(-1)
         else
