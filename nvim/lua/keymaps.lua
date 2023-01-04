@@ -32,6 +32,12 @@ vim.keymap.set('n', 'N', 'Nzzzv', {desc="search previous and center"})
 vim.keymap.set('x', '<leader>p', '\"_dP', {desc="[P]aste without altering registers"})
 vim.keymap.set('n', 'gV', [['`[' . strpart(getregtype(), 0, 1) . '`]']], {expr=true, desc="select last inserted/pasted text"})
 
+-- use alt + hjkl to resize windows
+vim.keymap.set('n', '<M-j>', '<cmd>resize -2<CR>')
+vim.keymap.set('n', '<M-k>', '<cmd>resize +2<CR>')
+vim.keymap.set('n', '<M-h>', '<cmd>vertical resize -2<CR>')
+vim.keymap.set('n', '<M-l>', '<cmd>vertical resize +2<CR>')
+
 -- edit and apply config in dotfiles repo
 vim.keymap.set('n', '<leader>ei', '<cmd>e '..find_dotfiles()..'\\nvim<CR>', {desc="[E]dit [I]nit.lua"})
 vim.keymap.set('n', '<leader>ii', '<cmd>lua copy_config()<CR>', {desc="[I]nstall [I]nit.lua"})
@@ -42,4 +48,3 @@ vim.keymap.set('t', '<C-w>h', '<C-\\><C-n><C-w>h')
 vim.keymap.set('t', '<C-w>j', '<C-\\><C-n><C-w>j')
 vim.keymap.set('t', '<C-w>k', '<C-\\><C-n><C-w>k')
 vim.keymap.set('t', '<C-w>l', '<C-\\><C-n><C-w>l')
-
