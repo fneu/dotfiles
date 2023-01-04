@@ -120,6 +120,28 @@ require("packer").startup(function(use)
         end
     }
 
+    use({
+        "kylechui/nvim-surround",
+        tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+        config = function()
+            require("nvim-surround").setup({
+                keymaps = {
+                    insert = "<C-g>s",
+                    normal = "ys",
+                    normal_cur = "yss",
+                    visual = "S",
+                    delete = "ds",
+                    change = "cs",
+                    -- necessary for linewise addition of normal visual selection
+                    insert_line = "<C-g>S",
+                    normal_line = "yS",
+                    normal_cur_line = "ySS",
+                    visual_line = "gS",
+                },
+            })
+        end
+    })
+
     if is_bootstrap then
         require("packer").sync()
     end
