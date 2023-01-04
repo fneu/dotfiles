@@ -20,6 +20,14 @@ function _G.find_nextcloud()
     return path
 end
 
+function _G.load_snippets()
+    local ok, from_lua = pcall(require, "luasnip.loaders.from_lua")
+    if not ok then
+        return
+    end
+    from_lua.load({paths = find_dotfiles().."/nvim/snippets"})
+end
+
 function _G.copy_config()
   local sink = vim.fn.stdpath('config')
   local source = find_dotfiles().."/nvim"
