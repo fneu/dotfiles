@@ -86,4 +86,50 @@ lsp.on_attach(function(client, bufnr)
 
 end)
 
+-- remap some cmp mappings
+local cmp = require('cmp')
+local cmp_select_opts = {behavior = cmp.SelectBehavior.Select}
+local luasnip = require('luasnip')
+local cmp_mappings = lsp.defaults.cmp_mappings({
+
+    ['<C-d>'] = cmp.mapping.scroll_docs(5),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-5),
+    ['<C-f>'] = nil,
+    ['<C-b>'] = nil,
+
+    -- when menu is visible, navigate to next item
+    -- else, expand or jump in snippet if possible
+    -- else, when line is empty, insert a tab character
+    -- else, activate completion
+    ['<Tab>'] = cmp.mapping(function(fallback)
+        local col = vim.fn.col('.') - 1
+        if cmp.visible() then
+            cmp.select_next_item(cmp_select_opts)
+        elseif luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()
+        elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+            fallback()
+        else
+            cmp.complete()
+        end
+    end, {'i', 's'}),
+
+    -- when menu is visible, navigate to previous item on list
+    -- else, jump backwards in snippet if possible
+    -- else, revert to default behavior
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+            cmp.select_prev_item(cmp_select_opts)
+        elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+        else
+            fallback()
+        end
+    end, {'i', 's'}),
+})
+
+lsp.setup_nvim_cmp({
+    mapping = cmp_mappings
+})
+
 lsp.setup()
