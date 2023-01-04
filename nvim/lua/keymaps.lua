@@ -2,8 +2,10 @@ vim.g.mapleader = " "
 
 -- compensate for German keyboard layout,
 -- use ä and ö for tpope/vim-unimpaired style paired mappings
+-- and ü to jump directly to marks
 vim.keymap.set({'n', 'x', 'o'}, 'ö', '[', {remap=true, desc="pr[Ö]vious"})
 vim.keymap.set({'n', 'x', 'o'}, 'ä', ']', {remap=true, desc="n[Ä]xt"})
+vim.keymap.set({'n', 'x', 'o'}, 'ü', '`', {remap=true, desc="jump to mark"})
 
 -- paired jumps
 vim.keymap.set('n', '[q', ':cprev<CR>zz', {desc="previous [Q]uickfix entry"})
