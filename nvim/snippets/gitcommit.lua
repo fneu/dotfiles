@@ -25,77 +25,114 @@ local types = require("luasnip.util.types")
 
 return {
     -- manually triggered
-    s("build",
-        fmt("build({}): {}\n\n{}",{
-            i(1),
-            i(2),
-            i(3),
-        })
+    s(
+        "build",
+        fmt(
+            "build({}): {}\n\n{}",
+            {
+                i(1),
+                i(2),
+                i(3)
+            }
+        )
     ),
-    s("ci",
-        fmt("ci({}): {}\n\n{}",{
-            i(1),
-            i(2),
-            i(3),
-        })
+    s(
+        "ci",
+        fmt(
+            "ci({}): {}\n\n{}",
+            {
+                i(1),
+                i(2),
+                i(3)
+            }
+        )
     ),
-    s("docs",
-        fmt("docs({}): {}\n\n{}",{
-            i(1),
-            i(2),
-            i(3),
-        })
+    s(
+        "docs",
+        fmt(
+            "docs({}): {}\n\n{}",
+            {
+                i(1),
+                i(2),
+                i(3)
+            }
+        )
     ),
-    s("feat",
-        fmt("feat({}): {}\n\n{}",{
-            i(1),
-            i(2),
-            i(3),
-        })
+    s(
+        "feat",
+        fmt(
+            "feat({}): {}\n\n{}",
+            {
+                i(1),
+                i(2),
+                i(3)
+            }
+        )
     ),
-    s("fix",
-        fmt("fix({}): {}\n\n{}",{
-            i(1),
-            i(2),
-            i(3),
-        })
+    s(
+        "fix",
+        fmt(
+            "fix({}): {}\n\n{}",
+            {
+                i(1),
+                i(2),
+                i(3)
+            }
+        )
     ),
-    s("perf",
-        fmt("perf({}): {}\n\n{}",{
-            i(1),
-            i(2),
-            i(3),
-        })
+    s(
+        "perf",
+        fmt(
+            "perf({}): {}\n\n{}",
+            {
+                i(1),
+                i(2),
+                i(3)
+            }
+        )
     ),
-    s("ref",
-        fmt("refactor({}): {}\n\n{}",{
-            i(1),
-            i(2),
-            i(3),
-        })
+    s(
+        "ref",
+        fmt(
+            "refactor({}): {}\n\n{}",
+            {
+                i(1),
+                i(2),
+                i(3)
+            }
+        )
     ),
-    s("style",
-        fmt("style({}): {}\n\n{}",{
-            i(1),
-            i(2),
-            i(3),
-        })
+    s(
+        "style",
+        fmt(
+            "style({}): {}\n\n{}",
+            {
+                i(1),
+                i(2),
+                i(3)
+            }
+        )
     ),
-    s("test",
-        fmt("test({}): {}\n\n{}",{
-            i(1),
-            i(2),
-            i(3),
-        })
+    s(
+        "test",
+        fmt(
+            "test({}): {}\n\n{}",
+            {
+                i(1),
+                i(2),
+                i(3)
+            }
+        )
     ),
-    s("chore",
-        fmt("chore({}): {}\n\n{}",{
-            i(1),
-            i(2),
-            i(3),
-        })
-    ),
-}, {
-    -- autotriggered, if enabled!!!
-}
-
+    s(
+        "chore",
+        fmt(
+            "chore({}): {}\n\n{}",
+            {
+                i(1),
+                i(2),
+                i(3)
+            }
+        )
+    )
+}, {}

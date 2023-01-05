@@ -8,20 +8,19 @@ configs.setup {
     ensure_installed = {"c_sharp", "python", "lua", "vim", "json", "markdown", "help"},
     highlight = {
         enable = true,
-
         -- as there is no treesitter syntax for xml available yet,
         -- this is necessary for xml folding
-        additional_vim_regex_highlighting = {"xml",}
+        additional_vim_regex_highlighting = {"xml"}
     },
     incremental_selection = {
         enable = true,
-        disable = {'help'},
+        disable = {"help"},
         keymaps = {
             init_selection = "<CR>",
             node_incremental = "<CR>",
             node_decremental = "<S-CR>",
-            scope_incremental = '<C-s>',
-        },
+            scope_incremental = "<C-s>"
+        }
     },
     indent = {
         enable = true
@@ -35,54 +34,54 @@ configs.setup {
             lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
             keymaps = {
                 -- You can use the capture groups defined in textobjects.scm
-                ['aa'] = '@parameter.outer',
-                ['ia'] = '@parameter.inner',
-                ['af'] = '@function.outer',
-                ['if'] = '@function.inner',
-                ['ac'] = '@class.outer',
-                ['ic'] = '@class.inner',
-                ['agc'] = '@comment.outer',
-            },
+                ["aa"] = "@parameter.outer",
+                ["ia"] = "@parameter.inner",
+                ["af"] = "@function.outer",
+                ["if"] = "@function.inner",
+                ["ac"] = "@class.outer",
+                ["ic"] = "@class.inner",
+                ["agc"] = "@comment.outer"
+            }
         },
         move = {
             enable = true,
             set_jumps = true, -- whether to set jumps in the jumplist
             goto_next_start = {
-                [']f'] = '@function.outer',
-                [']c'] = '@class.outer',
-                [']a'] = '@parameter.inner',
-                [']gc'] = '@comment.outer',
+                ["]f"] = "@function.outer",
+                ["]c"] = "@class.outer",
+                ["]a"] = "@parameter.inner",
+                ["]gc"] = "@comment.outer"
             },
             goto_next_end = {
-                [']F'] = '@function.outer',
-                [']C'] = '@class.outer',
-                [']A'] = '@parameter.inner',
-                [']GC'] = '@comment.outer',
+                ["]F"] = "@function.outer",
+                ["]C"] = "@class.outer",
+                ["]A"] = "@parameter.inner",
+                ["]GC"] = "@comment.outer"
             },
             goto_previous_start = {
-                ['[f'] = '@function.outer',
-                ['[c'] = '@class.outer',
-                ['[a'] = '@parameter.inner',
-                ['[gc'] = '@comment.outer',
+                ["[f"] = "@function.outer",
+                ["[c"] = "@class.outer",
+                ["[a"] = "@parameter.inner",
+                ["[gc"] = "@comment.outer"
             },
             goto_previous_end = {
-                ['[F'] = '@function.outer',
-                ['[C'] = '@class.outer',
-                ['[A'] = '@parameter.inner',
-                ['[GC'] = '@comment.outer',
-            },
+                ["[F"] = "@function.outer",
+                ["[C"] = "@class.outer",
+                ["[A"] = "@parameter.inner",
+                ["[GC"] = "@comment.outer"
+            }
         },
         swap = {
             enable = true,
             swap_next = {
-                ['<leader>a'] = '@parameter.inner',
+                ["<leader>a"] = "@parameter.inner"
             },
             swap_previous = {
-                ['<leader>A'] = '@parameter.inner',
-            },
-        },
-    },
+                ["<leader>A"] = "@parameter.inner"
+            }
+        }
+    }
 }
 
-vim.wo.foldmethod = 'expr'
-vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.wo.foldmethod = "expr"
+vim.wo.foldexpr = "nvim_treesitter#foldexpr()"

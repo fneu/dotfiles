@@ -1,5 +1,5 @@
-vim.opt_local.shiftwidth=2
-vim.opt_local.softtabstop=2
+vim.opt_local.shiftwidth = 2
+vim.opt_local.softtabstop = 2
 
 -- unfortunately, xml is not directly supported by treesitter (yet)
 -- therefore, neither syntax highlighting nor folding is supported.
@@ -8,4 +8,4 @@ vim.opt_local.softtabstop=2
 -- Another potential solution would be to use the html treesitter syntax (ft=html)
 -- but right now I'm having trouble installing it
 vim.g.xml_syntax_folding = true
-vim.opt_local.foldmethod="syntax"
+vim.opt_local.foldmethod = "syntax"

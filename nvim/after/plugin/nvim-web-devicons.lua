@@ -22,8 +22,8 @@ devicons.setup {
             color = "#000000",
             cterm_color = "00",
             name = "Pyproj"
-        },
-    };
-    color_icons = false;
-    default = true;
+        }
+    },
+    color_icons = false,
+    default = true
 }

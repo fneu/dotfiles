@@ -3,4 +3,10 @@ if not ok then
     return
 end
 
-vim.keymap.set({ "n", "x" }, "<leader>sr", function() ssr.open() end)
+vim.keymap.set(
+    {"n", "x"},
+    "<leader>sr",
+    function()
+        ssr.open()
+    end
+)
