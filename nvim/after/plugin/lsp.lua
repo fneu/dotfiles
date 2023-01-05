@@ -68,6 +68,8 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set('n', '<leader>wl', function()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, {buffer = bufnr, desc = "LSP: [W]orkspace [L]ist folders"})
+    vim.keymap.set({'n', 'v'}, '<leader>=', '<cmd>LspZeroFormat<cr>', { buffer = bufnr, desc = "LSP: format range or file" })
+
 
     -- Diagnostic keymaps
     vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, {buffer = bufnr, desc = "LSP: Previous [D]iagnostic"})
