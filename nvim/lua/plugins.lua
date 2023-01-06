@@ -154,3 +154,6 @@ require("packer").startup(
         end
     end
 )
+
+-- filter qflist
+vim.cmd 'packadd cfilter'

@@ -124,12 +124,31 @@ lsp.on_attach(
             vim.diagnostic.setloclist,
             {buffer = bufnr, desc = "LSP: buffer diagnostics to [L]oclist"}
         )
-        vim.keymap.set(
-            "n",
-            "<leader>q",
-            vim.diagnostic.setqflist,
-            {buffer = bufnr, desc = "LSP: all diagnostics to [Q]uickfix list"}
-        )
+
+        -- hide some null-warnings from qflist in C#
+        -- omnisharp doesn't seem to have a good global way to suppress them,
+        -- outside of editorconfig, but our .editorconfigs have root=true
+        --
+        -- this might not be a good idea
+        if vim.fn.getbufvar(bufnr, '&filetype') == "cs" then
+            vim.keymap.set(
+                "n",
+                "<leader>q",
+                function()
+                    vim.diagnostic.setqflist()
+                    vim.cmd":Cfilter! [^-]nulla\\=b\\=[^abl]"
+
+                end,
+                {buffer = bufnr, desc = "LSP: all diagnostics to [Q]uickfix list"}
+            )
+        else
+            vim.keymap.set(
+                "n",
+                "<leader>q",
+                vim.diagnostic.setqflist,
+                {buffer = bufnr, desc = "LSP: all diagnostics to [Q]uickfix list"}
+            )
+        end
 
         -- Telescope search keymaps
         local builtin = require("telescope.builtin")
