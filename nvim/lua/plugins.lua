@@ -57,7 +57,8 @@ require("packer").startup(
                 {
                     "nvim-telescope/telescope-fzf-native.nvim",
                     run = "make" -- scoop install make mingw
-                }
+                },
+                {'nvim-telescope/telescope-ui-select.nvim' }
             }
         }
 
