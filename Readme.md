@@ -23,7 +23,7 @@ This might fail if some files are already present. Rename or delete them.
 
 - Set the flag `showUntrackedFiles` to `no` locally, to not have everything in `$HOME` show up on running `config status`.
 
-```config config --local satus.showUntrackedFiles no```
+```config config --local status.showUntrackedFiles no```
 
 - done! From now on, the `config` (git) command can be used to manage the dotfiles 
 
