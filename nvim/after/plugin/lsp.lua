@@ -137,6 +137,8 @@ lsp.on_attach(
                 function()
                     vim.diagnostic.setqflist()
                     vim.cmd":Cfilter! [^-]nulla\\=b\\=[^abl]"
+                    vim.cmd":Cfilter! \\\\obj\\\\"
+                    vim.cmd":Cfilter! \\\\.nuget\\\\"
 
                 end,
                 {buffer = bufnr, desc = "LSP: all diagnostics to [Q]uickfix list"}
