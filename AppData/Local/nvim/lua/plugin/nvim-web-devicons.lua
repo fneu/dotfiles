@@ -23,7 +23,7 @@ return {
                         name = "Pyproj"
                     }
                 },
-                color_icons = true,
+                color_icons = false,
                 default = true
             }
         end

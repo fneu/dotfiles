@@ -2,7 +2,8 @@ return {
     {
         "mcchrish/zenbones.nvim",
         dependencies = {
-            "rktjmp/lush.nvim"
+            "rktjmp/lush.nvim",
+            "nvim-tree/nvim-web-devicons"  -- load devicons first, overwrite it's highlight group after
         },
         config = function(_, _)
             vim.cmd("colorscheme zenbones")
@@ -15,24 +16,12 @@ return {
                     return {
                         NormalFloat {zenbones.Normal},
                         DevIconDefault {zenbones.Type},
-                        NeoTreeCursorLine {zenbones.NvimTreeCursorLine},
-                        NeoTreeDimText {zenbones.Comment},
-                        NeoTreeDirectoryIcon {zenbones.Type},
-                        NeoTreeDirectoryName {zenbones.Directory},
-                        NeoTreeGitConflict {zenbones.WarningMsg},
-                        NeoTreeGitModified {zenbones.diffChanged},
-                        NeoTreeGitAdded {zenbones.diffAdded},
-                        NeoTreeGitDeleted {zenbones.diffRemoved},
-                        NeoTreeGitUntracked {zenbones.Comment},
-                        NeoTreeModified {zenbones.diffChanged},
-                        NeoTreeNormal {zenbones.NvimTreeNormal},
-                        NeoTreeRootName {zenbones.NvimTreeRootFolder},
-                        NeoTreeSymbolicLinkTarget {zenbones.NvimTreeSymlink},
-                        NeoTreeVertSplit {zenbones.NvimTreeWinSeparator},
-                        NeoTreeWinSeparator {zenbones.NvimTreeWinSeparator},
-                        NeoTreeWindowsHidden {zenbones.Comment},
-                        NeoTreeFloatTitle {zenbones.FloatBorder},
-                        NeoTreeFloatBorder {zenbones.FloatBorder}
+                        OilDir {zenbones.Type, gui="bold"},
+                        OilChange {zenbones.diffChanged},
+                        OilCopy {zenbones.diffAdded},
+                        OilCreate {zenbones.diffAdded},
+                        OilDelete {zenbones.diffRemoved},
+                        OilMove {zenbones.diffChanged},
                     }
                 end
             )
