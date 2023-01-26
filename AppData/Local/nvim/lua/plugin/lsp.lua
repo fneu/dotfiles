@@ -94,14 +94,6 @@ return {
                 vim.keymap.set("n", "K", vim.lsp.buf.hover, {buffer = bufnr, desc = "LSP: Hover Documentation"})
                 vim.keymap.set( "n", "<C-k>", ":LspOverloadsSignature<CR>", {buffer = bufnr, silent = true, desc = "LSP: [P]arameter Documentation"})
                 vim.keymap.set( "i", "<C-k>", "<C-o>:LspOverloadsSignature<CR>", {buffer = bufnr, silent = true, desc = "LSP: [P]arameter Documentation"})
-                vim.keymap.set( "n", "<leader>wa", vim.lsp.buf.add_workspace_folder, {buffer = bufnr, desc = "LSP: [W]orkspace [A]dd folder"})
-                vim.keymap.set( "n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, {buffer = bufnr, desc = "LSP: [W]orkspace [R]emove folder"})
-                vim.keymap.set( "n", "<leader>wl",
-                    function()
-                        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-                    end,
-                    {buffer = bufnr, desc = "LSP: [W]orkspace [L]ist folders"}
-                )
                 vim.keymap.set( {"n", "v"}, "<leader>=", "<cmd>LspZeroFormat<cr>", {buffer = bufnr, desc = "LSP: format range or file"})
 
                 -- Diagnostic keymaps
