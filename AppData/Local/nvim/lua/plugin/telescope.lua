@@ -44,11 +44,9 @@ return {
             -- KEYBINDINGS
             local builtin = require("telescope.builtin")
             vim.keymap.set("n", "<leader><space>", builtin.find_files, {desc = "[ ] Find files"})
-            vim.keymap.set("n", "<leader>f?", builtin.find_files, {desc = "[F]ind [?] recently opened files"})
+            vim.keymap.set("n", "<leader>f?", builtin.oldfiles, {desc = "[F]ind [?] recently opened files"})
             vim.keymap.set("n", "<leader>fb", builtin.buffers, {desc = "[F]ind [B]uffers"})
-            vim.keymap.set(
-                "n",
-                "<leader>/",
+            vim.keymap.set( "n", "<leader>/",
                 function()
                     builtin.current_buffer_fuzzy_find(
                         require("telescope.themes").get_dropdown {
