@@ -89,78 +89,26 @@ return {
                 vim.keymap.set("n", "<a-cr>", vim.lsp.buf.code_action, {buffer = bufnr, desc = "LSP: [C]ode [A]ction"})
                 vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer = bufnr, desc = "LSP: [G]oto [D]efinition"})
                 vim.keymap.set("n", "gr", vim.lsp.buf.references, {buffer = bufnr, desc = "LSP: [G]oto [R]eferences"})
-                vim.keymap.set(
-                    "n",
-                    "gI",
-                    vim.lsp.buf.implementation,
-                    {buffer = bufnr, desc = "LSP: [G]oto [I]mplementation"}
-                )
-                vim.keymap.set(
-                    "n",
-                    "go",
-                    vim.lsp.buf.type_definition,
-                    {buffer = bufnr, desc = "LSP: Type [D]efinition"}
-                )
+                vim.keymap.set( "n", "gI", vim.lsp.buf.implementation, {buffer = bufnr, desc = "LSP: [G]oto [I]mplementation"})
+                vim.keymap.set( "n", "go", vim.lsp.buf.type_definition, {buffer = bufnr, desc = "LSP: Type [D]efinition"})
                 vim.keymap.set("n", "K", vim.lsp.buf.hover, {buffer = bufnr, desc = "LSP: Hover Documentation"})
-                vim.keymap.set(
-                    "n",
-                    "<C-k>",
-                    ":LspOverloadsSignature<CR>",
-                    {buffer = bufnr, silent = true, desc = "LSP: [P]arameter Documentation"}
-                )
-                vim.keymap.set(
-                    "i",
-                    "<C-k>",
-                    "<C-o>:LspOverloadsSignature<CR>",
-                    {buffer = bufnr, silent = true, desc = "LSP: [P]arameter Documentation"}
-                )
-                vim.keymap.set(
-                    "n",
-                    "<leader>wa",
-                    vim.lsp.buf.add_workspace_folder,
-                    {buffer = bufnr, desc = "LSP: [W]orkspace [A]dd folder"}
-                )
-                vim.keymap.set(
-                    "n",
-                    "<leader>wr",
-                    vim.lsp.buf.remove_workspace_folder,
-                    {buffer = bufnr, desc = "LSP: [W]orkspace [R]emove folder"}
-                )
-                vim.keymap.set(
-                    "n",
-                    "<leader>wl",
+                vim.keymap.set( "n", "<C-k>", ":LspOverloadsSignature<CR>", {buffer = bufnr, silent = true, desc = "LSP: [P]arameter Documentation"})
+                vim.keymap.set( "i", "<C-k>", "<C-o>:LspOverloadsSignature<CR>", {buffer = bufnr, silent = true, desc = "LSP: [P]arameter Documentation"})
+                vim.keymap.set( "n", "<leader>wa", vim.lsp.buf.add_workspace_folder, {buffer = bufnr, desc = "LSP: [W]orkspace [A]dd folder"})
+                vim.keymap.set( "n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, {buffer = bufnr, desc = "LSP: [W]orkspace [R]emove folder"})
+                vim.keymap.set( "n", "<leader>wl",
                     function()
                         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
                     end,
                     {buffer = bufnr, desc = "LSP: [W]orkspace [L]ist folders"}
                 )
-                vim.keymap.set(
-                    {"n", "v"},
-                    "<leader>=",
-                    "<cmd>LspZeroFormat<cr>",
-                    {buffer = bufnr, desc = "LSP: format range or file"}
-                )
+                vim.keymap.set( {"n", "v"}, "<leader>=", "<cmd>LspZeroFormat<cr>", {buffer = bufnr, desc = "LSP: format range or file"})
 
                 -- Diagnostic keymaps
-                vim.keymap.set(
-                    "n",
-                    "[d",
-                    vim.diagnostic.goto_prev,
-                    {buffer = bufnr, desc = "LSP: Previous [D]iagnostic"}
-                )
+                vim.keymap.set( "n", "[d", vim.diagnostic.goto_prev, {buffer = bufnr, desc = "LSP: Previous [D]iagnostic"})
                 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, {buffer = bufnr, desc = "LSP: Next [D]iagnostic"})
-                vim.keymap.set(
-                    "n",
-                    "<leader>d",
-                    vim.diagnostic.open_float,
-                    {buffer = bufnr, desc = "LSP: show [E]rror"}
-                )
-                vim.keymap.set(
-                    "n",
-                    "<leader>l",
-                    vim.diagnostic.setloclist,
-                    {buffer = bufnr, desc = "LSP: buffer diagnostics to [L]oclist"}
-                )
+                vim.keymap.set( "n", "<leader>d", vim.diagnostic.open_float, {buffer = bufnr, desc = "LSP: show [E]rror"})
+                vim.keymap.set( "n", "<leader>l", vim.diagnostic.setloclist, {buffer = bufnr, desc = "LSP: buffer diagnostics to [L]oclist"})
 
                 -- hide some null-warnings from qflist in C#
                 -- omnisharp doesn't seem to have a good global way to suppress them,
@@ -168,9 +116,7 @@ return {
                 --
                 -- this might not be a good idea
                 if vim.fn.getbufvar(bufnr, "&filetype") == "cs" then
-                    vim.keymap.set(
-                        "n",
-                        "<leader>q",
+                    vim.keymap.set( "n", "<leader>q",
                         function()
                             vim.diagnostic.setqflist()
                             vim.cmd ":Cfilter! [^-]nulla\\=b\\=[^abl]"
@@ -190,30 +136,10 @@ return {
 
                 -- Telescope search keymaps
                 local builtin = require("telescope.builtin")
-                vim.keymap.set(
-                    "n",
-                    "<leader>fr",
-                    builtin.lsp_references,
-                    {buffer = bufnr, desc = "LSP: [F]ind [R]eferences"}
-                )
-                vim.keymap.set(
-                    "n",
-                    "<leader>fi",
-                    builtin.lsp_implementations,
-                    {buffer = bufnr, desc = "LSP: [F]ind [R]eferences"}
-                )
-                vim.keymap.set(
-                    "n",
-                    "<leader>fds",
-                    builtin.lsp_document_symbols,
-                    {buffer = bufnr, desc = "LSP: [F]ind [D]ocument [S]ymbols"}
-                )
-                vim.keymap.set(
-                    "n",
-                    "<leader>fws",
-                    builtin.lsp_workspace_symbols,
-                    {buffer = bufnr, desc = "LSP: [F]ind [W]orkspace [S]ymbols"}
-                )
+                vim.keymap.set( "n", "<leader>fr", builtin.lsp_references, {buffer = bufnr, desc = "LSP: [F]ind [R]eferences"})
+                vim.keymap.set( "n", "<leader>fi", builtin.lsp_implementations, {buffer = bufnr, desc = "LSP: [F]ind [R]eferences"})
+                vim.keymap.set( "n", "<leader>fds", builtin.lsp_document_symbols, {buffer = bufnr, desc = "LSP: [F]ind [D]ocument [S]ymbols"})
+                vim.keymap.set( "n", "<leader>fws", builtin.lsp_workspace_symbols, {buffer = bufnr, desc = "LSP: [F]ind [W]orkspace [S]ymbols"})
                 vim.keymap.set("n", "<leader>fd", builtin.diagnostics, {desc = "LSP: [F]ind [D]iagnostics"})
             end
         )
