@@ -35,8 +35,8 @@ vim.g.wiki_mappings_local = {
     ["x_<plug>(wiki-link-toggle-visual)"] = "<cr>",
 }
 vim.g.wiki_mappings_local_journal = {
-    ["<plug>(wiki-journal-prev)"] = "<c-n>",
-    ["<plug>(wiki-journal-next)"] = "<c-p>",
+    ["<plug>(wiki-journal-prev)"] = "<c-p>",
+    ["<plug>(wiki-journal-next)"] = "<c-n>",
 }
 
 
