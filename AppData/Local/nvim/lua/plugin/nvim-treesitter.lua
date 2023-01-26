@@ -21,7 +21,7 @@ return {
                 },
                 incremental_selection = {
                     enable = true,
-                    disable = {"help"},
+                    disable = {"help", "markdown"},
                     keymaps = {
                         init_selection = "<CR>",
                         node_incremental = "<CR>",
