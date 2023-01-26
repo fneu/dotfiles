@@ -50,7 +50,8 @@ vim.keymap.set("n", "<M-k>", "<cmd>resize +2<CR>")
 vim.keymap.set("n", "<M-h>", "<cmd>vertical resize -2<CR>")
 vim.keymap.set("n", "<M-l>", "<cmd>vertical resize +2<CR>")
 
--- edit and apply config in dotfiles repo
+-- edit and apply config
+vim.keymap.set("n", "<leader>cc", ":e $MYVIMRC<cr>", {desc = "edit [C]onfig"})
 vim.keymap.set("n", "<leader>rs", load_snippets, {desc = "[R]eload [S]nippets"})
 
 -- make terminal mode and movement less weird
