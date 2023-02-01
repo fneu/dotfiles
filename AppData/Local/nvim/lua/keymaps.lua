@@ -45,10 +45,10 @@ vim.keymap.set(
 )
 
 -- use alt + hjkl to resize windows
-vim.keymap.set("n", "<M-j>", "<cmd>resize -2<CR>")
-vim.keymap.set("n", "<M-k>", "<cmd>resize +2<CR>")
-vim.keymap.set("n", "<M-h>", "<cmd>vertical resize -2<CR>")
-vim.keymap.set("n", "<M-l>", "<cmd>vertical resize +2<CR>")
+-- vim.keymap.set("n", "<M-j>", "<cmd>resize -2<CR>")
+-- vim.keymap.set("n", "<M-k>", "<cmd>resize +2<CR>")
+-- vim.keymap.set("n", "<M-h>", "<cmd>vertical resize -2<CR>")
+-- vim.keymap.set("n", "<M-l>", "<cmd>vertical resize +2<CR>")
 
 -- edit and apply config
 vim.keymap.set("n", "<leader>cc", ":e $MYVIMRC<cr>", {desc = "edit [C]onfig"})
