@@ -4,7 +4,8 @@ return {
         config = function()
             require("lualine").setup {
                 options = {
-                    theme = "zenbones"
+                    theme = "zenbones",
+                    disabled_filetypes = {"neotest-summary"}
                 },
                 sections = {
                     lualine_b = {

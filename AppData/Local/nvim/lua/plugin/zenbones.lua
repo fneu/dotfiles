@@ -16,7 +16,7 @@ return {
                     return {
                         NormalFloat {zenbones.Normal},
                         DevIconDefault {zenbones.Type},
-                        OilDir {zenbones.Type, gui="bold"},
+                        OilDir {zenbones.Directory},
                         OilChange {zenbones.diffChanged},
                         OilCopy {zenbones.diffAdded},
                         OilCreate {zenbones.diffAdded},
