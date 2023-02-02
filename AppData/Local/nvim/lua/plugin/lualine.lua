@@ -12,7 +12,7 @@ return {
                         "diff",
                         {
                             "diagnostics",
-                            symbols = {error = "✘", warn = "▲", info = "", hint = "⚑"}
+                            symbols = {error = "", warn = "", info = "", hint = ""}
                         }
                     }
                 },
