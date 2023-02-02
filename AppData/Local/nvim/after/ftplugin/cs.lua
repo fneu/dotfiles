@@ -1,6 +1,19 @@
 -- install with `dotnet tool install -g csharpier`
 vim.keymap.set("n", "g=", "<cmd>%!dotnet csharpier --write-stdout<cr>", {desc = "Format with luafmt"})
 
+-- Goto Test
+local toggle_test = function()
+    local current_file = vim.fn.expand("%:p")
+    local is_src_file = current_file:find("[/\\]tests[/\\]") == nil
+    if is_src_file then
+        vim.cmd("edit " .. current_file:gsub("[/\\]src[/\\]", "/tests/Test."):gsub("%.cs$", "Tests.cs"))
+    else
+        vim.cmd("edit " .. current_file:gsub("[/\\]tests[/\\]Test.", "/src/"):gsub("%Tests.cs$", ".cs"))
+    end
+end
+
+vim.keymap.set("n", "<leader>tt", toggle_test, {desc = "[T]o [T]est"})
+
 -- Find and rebuild projects and solutions with custom telescope picker
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
