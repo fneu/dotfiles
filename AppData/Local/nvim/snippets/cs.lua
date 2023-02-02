@@ -24,9 +24,9 @@ local parse = require("luasnip.util.parser").parse_snippet
 local types = require("luasnip.util.types")
 
 local namespace = function()
-    local path = vim.fn.expand('%:h'):match('src[/\\](.*)')
+    local path = vim.fn.expand("%:h"):match("src[/\\](.*)")
     if path == nil then
-        path = vim.fn.expand('%:h'):match('tests[/\\](.*)')
+        path = vim.fn.expand("%:h"):match("tests[/\\](.*)")
     end
     if path == nil then
         return "fail"
@@ -44,19 +44,24 @@ return {
             "/// <summary>\n/// {}\n/// </summary>\n{}",
             {
                 i(1),
-                i(2),
+                i(2)
             }
         )
     ),
     s(
-        "nsp",
-        f(namespace)
+        "namespace",
+        fmt(
+            "namespace {}",
+            {
+                f(namespace)
+            }
+        )
     ),
     s(
         "finterface",
         fmt(
             [[
-                namespace {}
+                {}
                 {{
                     public interface {}
                     {{
@@ -66,8 +71,13 @@ return {
             ]],
             {
                 f(namespace, {}),
-                f(function() return vim.fn.expand('%:t:r') end, {}),
-                i(1),
+                f(
+                    function()
+                        return vim.fn.expand("%:t:r")
+                    end,
+                    {}
+                ),
+                i(1)
             }
         )
     ),
@@ -94,7 +104,7 @@ return {
                 rep(1),
                 rep(2),
                 i(4),
-                i(5),
+                i(5)
             }
         )
     ),
@@ -120,13 +130,23 @@ return {
             {
                 f(namespace, {}),
                 i(1),
-                f(function() return vim.fn.expand('%:t:r') end, {}),
+                f(
+                    function()
+                        return vim.fn.expand("%:t:r")
+                    end,
+                    {}
+                ),
                 i(2),
                 rep(1),
-                f(function() return vim.fn.expand('%:t:r') end, {}),
+                f(
+                    function()
+                        return vim.fn.expand("%:t:r")
+                    end,
+                    {}
+                ),
                 i(3),
-                i(4),
+                i(4)
             }
         )
-    ),
+    )
 }, {}
