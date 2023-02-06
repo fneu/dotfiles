@@ -42,7 +42,7 @@ return {
                         nowait=true},
                 }
             })
-            vim.keymap.set("n", "-", require("oil").open, { desc = "Open parent directory" })
+            vim.keymap.set("n", "-", function() require("oil").open(vim.fn.expand("%:p:h"):gsub("\\", "/")) end, { desc = "Open parent directory" })
             vim.keymap.set("n", "_", function() require("oil").open(".") end, { desc = "Open parent directory" })
         end
     }
