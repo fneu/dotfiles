@@ -36,6 +36,7 @@ vim.opt.updatetime = 500 -- CursorHold delay
 vim.opt.wildignore = "*.o,*.obj,.git,*.rbc,*.pyc,__pycache__"
 
 vim.opt.fileformats = "unix,dos"  -- prever unix line endings
+vim.opt.shellslash = true  -- use forward slash when expanding file names --> necessary for oil.nvim
 
 -- no folding by default, show start and end in foldtext
 vim.opt.foldlevel = 99
