@@ -2,9 +2,9 @@
   name = Fabian Neuschmidt
   email = fabian@neuschmidt.de
 
-[includeIf "gitdir/i:~/viperdev/"]
+[includeIf "gitdir/i:viperdev/"]
   path = .gitconfig-viperdev
-[includeIf "gitdir/i:~/icadev/"]
+[includeIf "gitdir/i:icadev/"]
   path = .gitconfig-icarus
 [core]
   editor = nvim
