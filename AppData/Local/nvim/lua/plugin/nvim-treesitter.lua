@@ -3,25 +3,25 @@ return {
         "nvim-treesitter/nvim-treesitter",
         dependencies = {
             "nvim-treesitter/nvim-treesitter-context", -- function context at top, not required, maybe remove alltogether?
-            "mrjones2014/nvim-ts-rainbow",
+            "HiPhish/nvim-ts-rainbow2",
             "nvim-treesitter/nvim-treesitter-textobjects"
         },
         build = function()
-            local ts_update = require("nvim-treesitter.install").update({with_sync = true})
+            local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
             ts_update()
         end,
         config = function(_, _)
             require "nvim-treesitter.configs".setup {
-                ensure_installed = {"c_sharp", "python", "lua", "vim", "json", "markdown", "help"},
+                ensure_installed = { "c_sharp", "python", "lua", "vim", "json", "markdown", "help" },
                 highlight = {
                     enable = true,
                     -- as there is no treesitter syntax for xml available yet,
                     -- this is necessary for xml folding
-                    additional_vim_regex_highlighting = {"xml"}
+                    additional_vim_regex_highlighting = { "xml" }
                 },
                 incremental_selection = {
                     enable = true,
-                    disable = {"help", "markdown"},
+                    disable = { "help", "markdown" },
                     keymaps = {
                         init_selection = "<CR>",
                         node_incremental = "<CR>",
@@ -33,7 +33,19 @@ return {
                     enable = true
                 },
                 rainbow = {
-                    enable = true
+                    enable = true,
+                    query = {
+                        'rainbow-parens',
+                        c_sharp = 'rainbow-parens-custom',
+                    },
+                    hlgroups = {
+                        "RainbowRose",
+                        "RainbowWater",
+                        "RainbowWood",
+                        "RainbowLeaf",
+                        "RainbowBlossom",
+                        "RainbowSky",
+                    },
                 },
                 textobjects = {
                     select = {
