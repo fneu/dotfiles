@@ -22,10 +22,9 @@ nnoremap s :vsc Extras.InvokePeasyMotionTwoCharJump<CR>
 
 " actions
 nmap zl :so ~/.vsvimrc<CR>
-nmap <Space>b :vsc Build.ReluildSolution<CR>
+nmap <Space>b :vsc Build.RebuildSolution<CR>
 
 " navigation and movement
-nmap <Space><Space> :vsc Edit.GoToAll<CR>
 nmap äd :vsc Edit.GoToNextIssueInFile<CR>
 nmap öd :vsc Edit.GoToPreviousIssueInFile<CR>
 nmap äe :vsc View.NextError<CR>
