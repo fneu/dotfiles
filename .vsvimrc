@@ -18,15 +18,16 @@ vnoremap gc :vsc Edit.ToggleComment<CR><Esc><Esc>
 nnoremap n nzz
 nnoremap N Nzz
 nnoremap <Space><CR> <C-]>
+nnoremap s :vsc Extras.InvokePeasyMotionTwoCharJump<CR>
 
 " actions
 nmap zl :so ~/.vsvimrc<CR>
-nmap <Space>b :vsc Build.BuildSolution<CR>
+nmap <Space>b :vsc Build.ReluildSolution<CR>
 
 " navigation and movement
 nmap <Space><Space> :vsc Edit.GoToAll<CR>
-nmap äi :vsc Edit.GoToNextIssueInFile<CR>
-nmap öi :vsc Edit.GoToPreviousIssueInFile<CR>
+nmap äd :vsc Edit.GoToNextIssueInFile<CR>
+nmap öd :vsc Edit.GoToPreviousIssueInFile<CR>
 nmap äe :vsc View.NextError<CR>
 nmap öe :vsc View.PreviousError<CR>
 nmap äm :vsc Edit.NextMethod<CR>
@@ -35,17 +36,17 @@ nmap äf :vsc Window.NextDocumentWindow<CR>
 nmap öf :vsc Window.PreviousDocumentWindow<CR>
 
 "tooltips
-nmap <Space>i :vsc Edit.QuickInfo<CR>
-nmap <Space>p :vsc Edit.ParameterInfo<CR>
+nmap <Space>d :vsc Edit.QuickInfo<CR>
+nmap <C-k> :vsc Edit.ParameterInfo<CR>
 
 " dialogs
 nmap <Space>o :vsc File.OpenFile<CR>
 nmap <Space>O :vsc File.OpenProject<CR>
-nmap <Space>q :vsc Window.QuickLaunch<CR>
+nmap <Space><Space> :vsc Edit.NavigateTo<CR>
 
 " tool windows
-nmap <Space>te :vsc TestExplorer.ShowTestExplorer<CR>
-nmap <Space>tt :vsc TestExplorer.RunAllTestsInContext<CR>
+nmap <Space>ts :vsc TestExplorer.ShowTestExplorer<CR>
+nmap <Space>tr :vsc TestExplorer.RunAllTestsInContext<CR>
 nmap <Space>td :vsc TestExplorer.DebugAllTestsInContext<CR>
 nmap <Space>ta :vsc TestExplorer.RunAllTests<CR>
 
