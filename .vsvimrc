@@ -13,8 +13,8 @@ nmap <C-l> :noh<CR>
 
 " editing
 nmap <Space>; A;<Esc>
-nnoremap gcc :vsc Edit.ToggleComment<CR>
-vnoremap gc :vsc Edit.ToggleComment<CR><Esc><Esc>
+nnoremap gcc :vsc Edit.ToggleLineComment<CR>
+vnoremap gc :vsc Edit.ToggleLineComment<CR><Esc><Esc>
 nnoremap n nzz
 nnoremap N Nzz
 nnoremap <Space><CR> <C-]>
