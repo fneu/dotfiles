@@ -1,0 +1,3 @@
+return {
+  'aduros/ai.vim',
+}
