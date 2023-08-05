@@ -12,7 +12,7 @@ return {
         end,
         config = function(_, _)
             require "nvim-treesitter.configs".setup {
-                ensure_installed = { "c_sharp", "python", "lua", "vim", "json", "markdown", "help" },
+                ensure_installed = { "c_sharp", "python", "lua", "vim", "json", "markdown"},
                 highlight = {
                     enable = true,
                     -- as there is no treesitter syntax for xml available yet,

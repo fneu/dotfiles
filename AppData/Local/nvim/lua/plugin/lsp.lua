@@ -44,20 +44,6 @@ return {
                 "pylsp", --python
                 "omnisharp", --c_sharp
                 "lemminx", --xml
-                "sumneko_lua" --lua
-            }
-        )
-
-        lsp.configure(
-            "sumneko_lua",
-            {
-                settings = {
-                    Lua = {
-                        diagnostics = {
-                            globals = {"vim"}
-                        }
-                    }
-                }
             }
         )
 
