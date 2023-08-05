@@ -7,6 +7,6 @@ return {
     config = function()
         require("codegpt.config")
         vim.keymap.set("n", "<leader>a", ":Chat ", {desc = "CodeGPT [A]i chat"})
-        vim.keymap.set("v", "<leader>a", ":Chat <tab>", {desc = "CodeGPT [A]i code features"})
+        vim.keymap.set("v", "<leader>a", ":Chat ", {desc = "CodeGPT [A]i code features"})
     end
 }
