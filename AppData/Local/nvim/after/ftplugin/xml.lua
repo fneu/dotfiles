@@ -1,3 +1,6 @@
+-- install with `scoop install xmllint`
+vim.keymap.set("n", "g=", "<cmd>%!xmllint --format -<cr>", {desc = "Format with xmllint"})
+
 vim.opt_local.shiftwidth = 2
 vim.opt_local.softtabstop = 2
 
