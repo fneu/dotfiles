@@ -38,6 +38,8 @@ vim.opt.wildignore = "*.o,*.obj,.git,*.rbc,*.pyc,__pycache__"
 vim.opt.fileformats = "unix,dos"  -- prever unix line endings
 
 -- no folding by default, show start and end in foldtext
+vim.wo.foldmethod = "expr"
+vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.foldlevel = 99
 vim.opt.foldtext =
     [[substitute(getline(v:foldstart),'\\t',repeat('\\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
@@ -52,3 +54,4 @@ if vim.fn.has("win32") then
     vim.o.shellquote = ''
     vim.o.shellxquote = ''
 end
+
