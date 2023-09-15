@@ -72,10 +72,7 @@ return {
             vim.keymap.set("n", "<leader>fk", builtin.keymaps, {desc = "[F]ind [K]eymaps"})
             vim.keymap.set("n", "<leader>fw", builtin.grep_string, {desc = "[F]ind current [W]ord"})
             vim.keymap.set("n", "<leader>fs", builtin.treesitter, {desc = "[F]ind [S]ymbol"})
-
-            vim.keymap.set("n", "<leader>fgb", builtin.git_branches, {desc = "[F]ind [G]it [B]ranch"})
-            vim.keymap.set("n", "<leader>fgs", builtin.git_stash, {desc = "[F]ind [G]it [S]tashes"})
-
+            vim.keymap.set("n", "<leader>gb", builtin.git_branches, {desc = "[F]ind [G]it [B]ranch"})
         end
     }
 }
