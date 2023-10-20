@@ -186,5 +186,17 @@ return {
         )
 
         lsp.setup()
+
+        -- disable slow completion in xml documents
+        local cmp = require'cmp'
+        cmp.setup.filetype('xml', {
+            enabled = false,
+        })
+
+        -- prevent slow completion blocking cmdline
+        cmp.setup.cmdline(':', {
+          enabled = false,
+        })
+
     end
 }

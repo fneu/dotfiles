@@ -2,7 +2,6 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         dependencies = {
-            "nvim-treesitter/nvim-treesitter-context", -- function context at top, not required, maybe remove alltogether?
             "HiPhish/nvim-ts-rainbow2",
             "nvim-treesitter/nvim-treesitter-textobjects"
         },
