@@ -18,7 +18,7 @@ wezterm.on(
   'format-tab-title',
   function(tab, tabs, panes, config, hover, max_width)
     local current_dir = (string.gsub(tab.active_pane.current_working_dir.path, "/$", ""))
-    local home_dir = (string.gsub(wezterm.url.parse(string.format("file:///%s", os.getenv("HOME"))).path, "/$", ""))
+    local home_dir = "/" .. wezterm.home_dir:gsub("\\", "/")
     return current_dir == home_dir and tab.tab_index+1 .. ": ~ " or tab.tab_index+1 .. ": " .. string.gsub(current_dir, "(.*[/\\])(.*)", "%2") .. " "
   end
 )
