@@ -11,6 +11,10 @@ function config { & git --git-dir=$HOME\.cfg\ --work-tree=$HOME $args}
 function cdc { & cd C:\ }
 function cdd { & cd D:\ }
 
+# Fancy completion, especially for git
+Import-Module Posh-Git
+Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
+
 #fzf integration:
 # Ctrl+t to paste file path
 # Ctrl+r to search history
