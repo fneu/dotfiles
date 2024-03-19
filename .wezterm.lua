@@ -5,6 +5,7 @@ local config = wezterm.config_builder()
 
 config.default_prog = {"pwsh.exe", "-NoLogo"}
 config.font = wezterm.font("MonoLisa NF")
+config.adjust_window_size_when_changing_font_size = false
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 -- Fancy tab bar cannot be themed by color schemes,
 -- only by custom config
