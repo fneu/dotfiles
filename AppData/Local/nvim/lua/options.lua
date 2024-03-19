@@ -9,19 +9,24 @@ vim.opt.smartcase = true
 
 vim.opt.termguicolors = true
 vim.opt.background = "light"
-
+vim.opt.cursorline = true
 vim.opt.number = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false
 vim.opt.signcolumn = "yes"
 vim.opt.wrap = false
+vim.opt.breakindent = true
+vim.opt.inccommand = 'split'
 
-vim.opt.scrolloff = 8
-vim.opt.sidescrolloff = 8
+vim.opt.showmode = false
+vim.opt.clipboard = "unnamedplus"
+
+vim.opt.scrolloff = 10
+vim.opt.sidescrolloff = 10
 vim.opt.showbreak = "↳ "
 vim.opt.list = true
 vim.opt.listchars = {
     tab = "→ ",
-    nbsp = "+",
+    nbsp = "␣",
     trail = "·",
     extends = "›",
     precedes = "‹"
@@ -31,7 +36,8 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
 
-vim.opt.updatetime = 500 -- CursorHold delay
+vim.opt.updatetime = 250 -- CursorHold delay
+vim.opt.timeoutlen = 300 -- decrease mapped sequence timeout
 
 vim.opt.wildignore = "*.o,*.obj,.git,*.rbc,*.pyc,__pycache__"
 

@@ -82,17 +82,9 @@ return {
                 vim.keymap.set( "i", "<C-k>", "<C-o>:LspOverloadsSignature<CR>", {buffer = bufnr, silent = true, desc = "LSP: [P]arameter Documentation"})
                 vim.keymap.set( {"n", "v"}, "<leader>=", "<cmd>LspZeroFormat<cr>", {buffer = bufnr, desc = "LSP: format range or file"})
 
-                -- Diagnostic keymaps
-                vim.keymap.set( "n", "[d", vim.diagnostic.goto_prev, {buffer = bufnr, desc = "LSP: Previous [D]iagnostic"})
-                vim.keymap.set("n", "]d", vim.diagnostic.goto_next, {buffer = bufnr, desc = "LSP: Next [D]iagnostic"})
-                vim.keymap.set( "n", "<leader>d", vim.diagnostic.open_float, {buffer = bufnr, desc = "LSP: show [E]rror"})
-                vim.keymap.set( "n", "<leader>l", vim.diagnostic.setloclist, {buffer = bufnr, desc = "LSP: buffer diagnostics to [L]oclist"})
-
                 -- hide some null-warnings from qflist in C#
                 -- omnisharp doesn't seem to have a good global way to suppress them,
                 -- outside of editorconfig, but our .editorconfigs have root=true
-                --
-                -- this might not be a good idea
                 if vim.fn.getbufvar(bufnr, "&filetype") == "cs" then
                     vim.keymap.set( "n", "<leader>q",
                         function()
@@ -121,6 +113,7 @@ return {
                 vim.keymap.set("n", "<leader>fd", builtin.diagnostics, {desc = "LSP: [F]ind [D]iagnostics"})
             end
         )
+
 
         -- remap some cmp mappings
         local cmp = require("cmp")

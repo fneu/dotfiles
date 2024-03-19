@@ -24,8 +24,6 @@ vim.keymap.set(
 -- move selected lines
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", {desc = "move selection down"})
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", {desc = "move selection up"})
-vim.keymap.set("v", "<", "<gv", {desc = "unindent selection"})
-vim.keymap.set("v", ">", ">gv", {desc = "indent selection"})
 
 -- deal with word wrap
 vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", {expr = true, silent = true})
@@ -34,6 +32,9 @@ vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", {expr = true, silent = tru
 -- center after search
 vim.keymap.set("n", "n", "nzzzv", {desc = "search [N]ext and center"})
 vim.keymap.set("n", "N", "Nzzzv", {desc = "search previous and center"})
+
+-- reset highlight on esc in normal mode
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- pasting
 vim.keymap.set("x", "<leader>p", '"_dP', {desc = "[P]aste without altering registers"})
@@ -62,4 +63,20 @@ vim.keymap.set("t", "<C-w>k", "<C-\\><C-n><C-w>k")
 vim.keymap.set("t", "<C-w>l", "<C-\\><C-n><C-w>l")
 
 -- copy filepath
-vim.keymap.set("n", "yp", ":let @+ = expand('%')<cr>", {desc = "[Y]ank file[P]ath"})
+vim.keymap.set("n", "yp", ":let @+ = expand('%:p')<cr>", {desc = "[Y]ank file[P]ath"})
+
+-- Diagnostic keymaps
+vim.keymap.set( "n", "öd", vim.diagnostic.goto_prev, {buffer = bufnr, desc = "pr[Ö]vious [D]iagnostic"})
+vim.keymap.set("n", "äd", vim.diagnostic.goto_next, {buffer = bufnr, desc = "n[Ä]xt [D]iagnostic"})
+vim.keymap.set( "n", "<leader>d", vim.diagnostic.open_float, {buffer = bufnr, desc = "Show [D]iagnostic Message"})
+vim.keymap.set( "n", "<leader>l", vim.diagnostic.setloclist, {buffer = bufnr, desc = "buffer diagnostics to [L]oclist"})
+
+
+-- Keybinds to make split navigation easier.
+--  Use CTRL+<hjkl> to switch between windows
+--
+--  See `:help wincmd` for a list of all window commands
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
