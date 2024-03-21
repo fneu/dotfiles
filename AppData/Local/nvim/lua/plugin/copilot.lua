@@ -18,10 +18,10 @@ return {
                 suggestion = {
                     auto_trigger = true,
                     keymap = {
-                        accept = "<M-l>",
-                        prev = "<M-k>",
-                        next = "<M-j>",
-                        dismiss = "<M-h>"
+                        accept = "<C-l>",
+                        prev = "<C-k>",
+                        next = "<C-j>",
+                        dismiss = "<C-h>"
                     }
                 }
             }

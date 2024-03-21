@@ -1,12 +1,16 @@
 return {
     {
         "nvim-telescope/telescope.nvim",
+        -- event = 'VimEnter',
         branch = "0.1.x",
         dependencies = {
             "nvim-lua/plenary.nvim",
             {
                 "nvim-telescope/telescope-fzf-native.nvim",
-                build = "make" -- scoop install make mingw
+                build = "make", -- scoop install make mingw
+                -- cond = function()
+                --     return vim.fn.executable("make") == 1
+                -- end,
             },
             "nvim-telescope/telescope-ui-select.nvim"
         },
@@ -38,22 +42,14 @@ return {
                 }
             }
 
-            require "telescope".load_extension("fzf")
+            -- require "telescope".load_extension("fzf")
             require("telescope").load_extension("ui-select")
 
             -- KEYBINDINGS
             local builtin = require("telescope.builtin")
-            vim.keymap.set("n", "<leader><space>", builtin.find_files, {desc = "[ ] Find files"})
-            vim.keymap.set(
-                "n",
-                "<leader>ff",
-                function()
-                    builtin.find_files({cwd = vim.fn.expand("%:h")})
-                end,
-                {desc = "[F]ind relative [F]iles"}
-            )
-            vim.keymap.set("n", "<leader>f?", builtin.oldfiles, {desc = "[F]ind [?] recently opened files"})
-            vim.keymap.set("n", "<leader>fb", builtin.buffers, {desc = "[F]ind [B]uffers"})
+            vim.keymap.set("n", "<leader>ff", builtin.find_files, {desc = "[F]ind [F]iles"})
+            vim.keymap.set("n", "<leader>f.", builtin.oldfiles, {desc = "[F]ind recent files ('.' for repeat)"})
+            vim.keymap.set("n", "<leader><leader>", builtin.buffers, {desc = "[F]ind [B]uffers"})
             vim.keymap.set(
                 "n",
                 "<leader>/",
@@ -71,8 +67,8 @@ return {
             vim.keymap.set("n", "<leader>fh", builtin.help_tags, {desc = "[F]ind [H]elp"})
             vim.keymap.set("n", "<leader>fk", builtin.keymaps, {desc = "[F]ind [K]eymaps"})
             vim.keymap.set("n", "<leader>fw", builtin.grep_string, {desc = "[F]ind current [W]ord"})
-            vim.keymap.set("n", "<leader>fs", builtin.treesitter, {desc = "[F]ind [S]ymbol"})
-            vim.keymap.set("n", "<leader>gb", builtin.git_branches, {desc = "[F]ind [G]it [B]ranch"})
+            vim.keymap.set("n", "<leader>fs", builtin.builtin, {desc = "[F]ind [S]elect Telescope"})
+            vim.keymap.set("n", "<leader>fb", builtin.git_branches, {desc = "[F]ind Git [B]ranch"})
         end
     }
 }
