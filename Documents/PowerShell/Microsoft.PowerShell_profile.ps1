@@ -22,6 +22,18 @@ Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
 Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
 
 # Aliase
+function fullrebuild {
+    Get-ChildItem -Path . -Include bin,obj -Recurse -Force | Remove-Item -Recurse -Force
+    dotnet clean
+    dotnet build
+}
+
+function frb {
+    Get-ChildItem -Path . -Include bin,obj -Recurse -Force | Remove-Item -Recurse -Force
+    dotnet clean
+    dotnet build
+}
+
 function rebuild {
     dotnet clean
     dotnet build
