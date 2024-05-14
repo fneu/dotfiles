@@ -22,10 +22,27 @@ Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
 Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
 
 # Aliase
-Set-Alias rebuild 'dotnet clean && dotnet build'
-Set-Alias rb 'dotnet clean && dotnet build'
-Set-Alias rebuildrun 'dotnet clean && dotnet build && dotnet run'
-Set-Alias rbr 'dotnet clean && dotnet build && dotnet run'
+function rebuild {
+    dotnet clean
+    dotnet build
+}
+
+function rb {
+    dotnet clean
+    dotnet build
+}
+
+function rebuildrun {
+    dotnet clean
+    dotnet build
+    dotnet run
+}
+
+function rbr {
+    dotnet clean
+    dotnet build
+    dotnet run
+}
 
 # prompt
 Invoke-Expression (&starship init powershell)
