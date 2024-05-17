@@ -15,6 +15,16 @@ function cdd { & cd D:\ }
 Import-Module Posh-Git
 Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
 
+# Color overrides
+$colors =@{}
+$colors['Command'] = [System.ConsoleColor]::Yellow # The command token color.
+$colors['String'] = [System.ConsoleColor]::Green # The string token color.
+$colors['Variable'] = [System.ConsoleColor]::Blue # The variable token color.
+$colors['Keyword'] = [System.ConsoleColor]::Magenta # The keyword token color.
+$colors['Comment'] = [System.ConsoleColor]::DarkGray #+++ The default token color.
+$colors['InlinePrediction'] = "`e[90;2;3m" #+++ The color for the inline view of the predictive suggestion.
+Set-PSReadlineOption -Colors $colors
+
 #fzf integration:
 # Ctrl+t to paste file path
 # Ctrl+r to search history
