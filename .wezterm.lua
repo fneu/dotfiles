@@ -18,9 +18,9 @@ config.colors = {
 	foreground = "#e0e2ea",
 	background = "#14161b",
 
-	cursor_fg = "#14161b",
-	cursor_bg = "#e0e2ea",
-	cursor_border = "#14161b",
+	cursor_fg = "e0e2ea",
+	cursor_bg = "#9b9ea4",
+	cursor_border = "e0e2ea",
 
 	selection_fg = "none",
 	selection_bg = "#4f5258",
@@ -30,17 +30,17 @@ config.colors = {
 
 	-- dark nvim colors brightened 30%
 	ansi = {
-		"14161b",
-		"#d70013",
-		"#00d457",
-		"#e3b000",
-		"#009ae9",
-		"#ca00c4",
-		"#00e9e9",
-		"#e0e2ea",
+		"#07080d",
+		"#ffc0b9",
+		"#b3f6c0",
+		"#fce094",
+		"#a6dbff",
+		"#ffcaff",
+		"#8cf8f7",
+		"#eef1f8",
 	},
 	brights = {
-		"9b9ea4",
+		"#9b9ea4",
 		"#ffc0b9",
 		"#b3f6c0",
 		"#fce094",
