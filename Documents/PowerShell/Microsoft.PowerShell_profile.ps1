@@ -66,6 +66,12 @@ function rbr {
     dotnet run
 }
 
+# nicer ls with colors
+# Install with `Install-Module Get-ChildItemCOlor`
+Import-Module Get-ChildItemColor
+Set-Alias -Name dir -Value Get-ChildItemColor -Option AllScope
+Set-Alias -Name ls -Value Get-ChildItemColorFormatWide
+
 # prompt
 Invoke-Expression (&starship init powershell)
 $prompt = ""
