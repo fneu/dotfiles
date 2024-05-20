@@ -165,9 +165,3 @@ vim.api.nvim_create_autocmd(
         pattern = "*"
     }
 )
-
---
--- Load all *.lua files from plugins directory.
--- (disable files by i.e. naming them *.lua_)
---
-vim.cmd('runtime! plugins/*.lua')
