@@ -1,6 +1,7 @@
 MiniDeps.add("stevearc/oil.nvim")
 
 require("oil").setup{
+    columns = { "icon" },
     view_options = {
         show_hidden = true,
     },
