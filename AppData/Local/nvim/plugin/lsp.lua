@@ -5,11 +5,13 @@ MiniDeps.add{
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
         "WhoIsSethDaniel/mason-tool-installer.nvim",
-        "j-hui/fidget.nvim"
+        "j-hui/fidget.nvim",
+        "Hoffs/omnisharp-extended-lsp.nvim",
+        "Issafalcon/lsp-overloads.nvim",
     }
 }
 
-MiniDeps.later(function()
+MiniDeps.now(function()
     require("neodev").setup{}
     require("fidget").setup{}
     require("mason").setup{}
@@ -21,7 +23,40 @@ MiniDeps.later(function()
 
     -- add language servers here
     local servers = {
-        omnisharp = {},
+        -- TODO: manually roll back version to v1.39.8
+        -- https://github.com/OmniSharp/omnisharp-roslyn/issues/2574
+        omnisharp = {
+            settings = {
+                Cs = {
+                    enable_editorconfig_support = true,
+                    -- If true, MSBuild project system will only load projects for files that
+                    -- were opened in the editor. This setting is useful for big C# codebases
+                    -- and allows for faster initialization of code navigation features only
+                    -- for projects that are relevant to code that is being edited. With this
+                    -- setting enabled OmniSharp may load fewer projects and may thus display
+                    -- incomplete reference lists for symbols.
+                    enable_ms_build_load_projects_on_demand = false,
+                    -- Enables support for roslyn analyzers, code fixes and rulesets.
+                    enable_roslyn_analyzers = false,
+                    -- Specifies whether 'using' directives should be grouped and sorted during
+                    -- document formatting.
+                    organize_imports_on_format = true,
+                    -- Enables support for showing unimported types and unimported extension
+                    -- methods in completion lists. When committed, the appropriate using
+                    -- directive will be added at the top of the current file. This option can
+                    -- have a negative impact on initial completion responsiveness,
+                    -- particularly for the first few completion sessions after opening a
+                    -- solution.
+                    enable_import_completion = true,
+                    -- Specifies whether to include preview versions of the .NET SDK when
+                    -- determining which version to use for project loading.
+                    sdk_include_prereleases = true,
+                    -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
+                    -- true
+                    analyze_open_documents_only = false,
+                }
+            }
+        },
         lua_ls = {
             settings = {
                 Lua = {
@@ -54,14 +89,24 @@ MiniDeps.later(function()
     vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
         callback = function(args)
+            local filetype = vim.api.nvim_get_option_value('filetype', {buf = args.buf})
+
             local map = function(keys, func, desc)
-                vim.keymap.set('n', keys, func, { buffer = args.buf, desc = 'LSP: ' .. desc })
+                vim.keymap.set('n', keys, func, { buffer = args.buf, silent = true, desc = 'LSP: ' .. desc })
             end
 
-            map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-            map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-            map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-            map('gD', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+
+            if filetype == 'cs' then
+                map("gd", ":lua require('omnisharp_extended').telescope_lsp_definitions()<cr>", '[G]oto [D]efinition')
+                map("gr", ":lua require('omnisharp_extended').telescope_lsp_references()<cr>", '[G]oto [R]eferences')
+                map("gI", ":lua require('omnisharp_extended').telescope_lsp_type_definition()<cr>", '[G]oto [I]mplementation')
+                map("gD", ":lua require('omnisharp_extended').telescope_lsp_implementation()<cr>", 'Type [D]efinition')
+            else
+                map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+                map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+                map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+                map('gD', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+            end
             map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
             map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
             map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
@@ -98,6 +143,21 @@ MiniDeps.later(function()
                 map('<leader>th', function()
                     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
                 end, '[T]oggle Inlay [H]ints')
+            end
+
+            -- overload signature help
+            if client and client.server_capabilities.signatureHelpProvider then
+                require('lsp-overloads').setup(client, {
+                    keymaps = {
+                      next_signature = "<C-j>",
+                      previous_signature = "<C-k>",
+                      next_parameter = "<C-l>",
+                      previous_parameter = "<C-h>",
+                      close_signature = "<C-s>"
+                    },
+                })
+                map('<C-s>', ":LspOverloadsSignature<CR>", 'Show [S]ignature')
+                vim.keymap.set('i', '<C-s>', "<cmd>LspOverloadsSignature<CR>", { noremap = true, buffer = args.buf, silent = true, desc = 'LSP: Show [S]ignature'})
             end
         end,
     })
