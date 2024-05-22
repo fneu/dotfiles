@@ -1,4 +1,4 @@
--- 
+--
 -- Bootstrap mini.deps
 --
 
@@ -34,7 +34,7 @@ vim.opt.termguicolors = true
 vim.opt.background = "dark"
 vim.opt.cursorline = true
 vim.opt.number = true
-vim.opt.relativenumber = false
+vim.opt.relativenumber = true
 vim.opt.signcolumn = "yes"
 vim.opt.wrap = false
 vim.opt.breakindent = true
@@ -60,7 +60,6 @@ vim.opt.backup = false
 vim.opt.undofile = true
 
 vim.opt.updatetime = 250 -- CursorHold delay
-vim.opt.timeoutlen = 300 -- decrease mapped sequence timeout
 
 vim.opt.wildignore = "*.o,*.obj,.git,*.rbc,*.pyc,__pycache__"
 
@@ -98,8 +97,12 @@ vim.keymap.set({"n", "x", "o"}, "ä", "]", {remap = true, desc = "n[Ä]xt"})
 -- paired jumps
 vim.keymap.set("n", "[q", ":cprev<CR>zz", {desc = "previous [Q]uickfix entry"})
 vim.keymap.set("n", "]q", ":cnext<CR>zz", {desc = "next [Q]uickfix entry"})
+vim.keymap.set("n", "[Q", ":cfirst<CR>zz", {desc = "first [Q]uickfix entry"})
+vim.keymap.set("n", "]Q", ":clast<CR>zz", {desc = "last [Q]uickfix entry"})
 vim.keymap.set("n", "[l", ":lprev<CR>zz", {desc = "previous [L]ocation entry"})
 vim.keymap.set("n", "]l", ":lnext<CR>zz", {desc = "next [L]ocation entry"})
+vim.keymap.set("n", "[L", ":lfirst<CR>zz", {desc = "first [L]ocation entry"})
+vim.keymap.set("n", "]L", ":llast<CR>zz", {desc = "last [L]ocation entry"})
 
 -- search and replace current word (case sensitive)
 vim.keymap.set(
@@ -149,6 +152,32 @@ vim.keymap.set( "n", "öd", vim.diagnostic.goto_prev, {desc = "pr[Ö]vious [D]ia
 vim.keymap.set("n", "äd", vim.diagnostic.goto_next, {desc = "n[Ä]xt [D]iagnostic"})
 vim.keymap.set( "n", "<leader>d", vim.diagnostic.open_float, {desc = "Show [D]iagnostic Message"})
 vim.keymap.set( "n", "<leader>l", vim.diagnostic.setloclist, {desc = "buffer diagnostics to [L]oclist"})
+
+-- Toggle stuff
+local function opt_toggle(opt, on, off, name)
+  local message = name
+  if vim.opt[opt]:get() == off then
+    vim.opt[opt] = on
+    message = message .. " enabled"
+  else
+    vim.opt[opt] = off
+    message = message .. " disabled"
+  end
+  vim.notify(message)
+end
+
+vim.keymap.set( "n", "<leader>tn", function()
+    opt_toggle("number", true, false, "Line Numbers")
+end, {desc = "[T]oggle line [N]umbers"})
+vim.keymap.set( "n", "<leader>tr", function()
+    opt_toggle("relativenumber", true, false, "Relative line Numbers")
+end, {desc = "[T]oggle [R]elative line numbers"})
+vim.keymap.set( "n", "<leader>tw", function()
+    opt_toggle("wrap", true, false, "Word wrap")
+end, {desc = "[T]oggle [W]rap"})
+vim.keymap.set( "n", "<leader>tb", function()
+    opt_toggle("background", "light", "dark", "Light")
+end, {desc = "[T]oggle [B]ackground"})
 
 --
 -- Autocmds
