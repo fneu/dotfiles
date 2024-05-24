@@ -147,9 +147,6 @@ vim.keymap.set("n", "yp",
     {desc = "[Y]ank file[P]ath"})
 
 -- Diagnostic keymaps
--- TODO: these might be builtin now?
-vim.keymap.set( "n", "öd", vim.diagnostic.goto_prev, {desc = "pr[Ö]vious [D]iagnostic"})
-vim.keymap.set("n", "äd", vim.diagnostic.goto_next, {desc = "n[Ä]xt [D]iagnostic"})
 vim.keymap.set( "n", "<leader>d", vim.diagnostic.open_float, {desc = "Show [D]iagnostic Message"})
 vim.keymap.set( "n", "<leader>l", vim.diagnostic.setloclist, {desc = "buffer diagnostics to [L]oclist"})
 
