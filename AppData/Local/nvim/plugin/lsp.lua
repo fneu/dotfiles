@@ -8,6 +8,7 @@ MiniDeps.add{
         "j-hui/fidget.nvim",
         "Hoffs/omnisharp-extended-lsp.nvim",
         "Issafalcon/lsp-overloads.nvim",
+        "ray-x/lsp_signature.nvim",
     }
 }
 
@@ -145,19 +146,28 @@ MiniDeps.now(function()
                 end, '[T]oggle Inlay [H]ints')
             end
 
+            require("lsp_signature").on_attach({
+                toggle_key = "<C-k>",
+                doc_lines = 1,
+                floating_window = false,
+                hint_enable = false,
+                fix_pos = false,
+                always_trigger = true,
+            }, args.buf)
+
             -- overload signature help
             if client and client.server_capabilities.signatureHelpProvider then
-                require('lsp-overloads').setup(client, {
-                    keymaps = {
-                      next_signature = "<C-j>",
-                      previous_signature = "<C-k>",
-                      next_parameter = "<C-l>",
-                      previous_parameter = "<C-h>",
-                      close_signature = "<C-s>"
-                    },
-                })
-                map('<C-s>', ":LspOverloadsSignature<CR>", 'Show [S]ignature')
-                vim.keymap.set('i', '<C-s>', "<cmd>LspOverloadsSignature<CR>", { noremap = true, buffer = args.buf, silent = true, desc = 'LSP: Show [S]ignature'})
+                -- require('lsp-overloads').setup(client, {
+                --     keymaps = {
+                --       next_signature = "<C-j>",
+                --       previous_signature = "<C-k>",
+                --       next_parameter = "<C-l>",
+                --       previous_parameter = "<C-h>",
+                --       close_signature = "<C-s>"
+                --     },
+                -- })
+                -- map('<C-s>', ":LspOverloadsSignature<CR>", 'Show [S]ignature')
+                -- vim.keymap.set('i', '<C-s>', "<cmd>LspOverloadsSignature<CR>", { noremap = true, buffer = args.buf, silent = true, desc = 'LSP: Show [S]ignature'})
             end
         end,
     })
