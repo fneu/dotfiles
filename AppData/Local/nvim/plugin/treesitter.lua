@@ -12,7 +12,7 @@ MiniDeps.add({
     },
 })
 
-MiniDeps.now(function()
+MiniDeps.later(function()
     require("nvim-treesitter.install").prefer_git = true
     require("nvim-treesitter.configs").setup({
         ensure_installed = {
