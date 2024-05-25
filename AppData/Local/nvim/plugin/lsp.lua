@@ -7,8 +7,8 @@ MiniDeps.add{
         "WhoIsSethDaniel/mason-tool-installer.nvim",
         "j-hui/fidget.nvim",
         "Hoffs/omnisharp-extended-lsp.nvim",
-        "Issafalcon/lsp-overloads.nvim",
-        "ray-x/lsp_signature.nvim",
+        -- "Issafalcon/lsp-overloads.nvim",
+        -- "ray-x/lsp_signature.nvim",
     }
 }
 
@@ -71,8 +71,19 @@ MiniDeps.now(function()
 
     -- add other tools here
     local ensure_installed = vim.tbl_keys(servers or {})
+
+    -- Filter out omnisharp without a version specified
+    -- https://github.com/OmniSharp/omnisharp-roslyn/issues/2574
+    ensure_installed = vim.tbl_filter(function(item)
+        return item ~= 'omnisharp'
+    end, ensure_installed)
+
     vim.list_extend(ensure_installed, {
         'stylua',
+        {'omnisharp', version = 'v1.39.8'},
+        'isort',
+        'black',
+        'csharpier'
     })
 
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -145,15 +156,15 @@ MiniDeps.now(function()
                     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
                 end, '[T]oggle Inlay [H]ints')
             end
-
-            require("lsp_signature").on_attach({
-                toggle_key = "<C-k>",
-                doc_lines = 1,
-                floating_window = false,
-                hint_enable = false,
-                fix_pos = false,
-                always_trigger = true,
-            }, args.buf)
+            --
+            -- require("lsp_signature").on_attach({
+            --     toggle_key = "<C-k>",
+            --     doc_lines = 1,
+            --     floating_window = false,
+            --     hint_enable = false,
+            --     fix_pos = false,
+            --     always_trigger = true,
+            -- }, args.buf)
 
             -- overload signature help
             if client and client.server_capabilities.signatureHelpProvider then
