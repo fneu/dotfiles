@@ -1,16 +1,17 @@
-MiniDeps.add({
-    source = "neovim/nvim-lspconfig",
-    depends = {
-        "folke/neodev.nvim",
-        "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        "j-hui/fidget.nvim",
-        "Hoffs/omnisharp-extended-lsp.nvim",
-    },
-})
+MiniDeps.later(function()
+    MiniDeps.add({
+        source = "neovim/nvim-lspconfig",
+        depends = {
+            "folke/neodev.nvim",
+            "williamboman/mason.nvim",
+            "williamboman/mason-lspconfig.nvim",
+            "WhoIsSethDaniel/mason-tool-installer.nvim",
+            "j-hui/fidget.nvim",
+            "Hoffs/omnisharp-extended-lsp.nvim",
+            "nvim-telescope/telescope.nvim",
+        },
+    })
 
-MiniDeps.now(function()
     require("neodev").setup({})
     require("fidget").setup({})
     require("mason").setup({})
@@ -165,4 +166,9 @@ MiniDeps.now(function()
             end
         end,
     })
+
+    -- This is necessary to reliably have the lsp start on the initial buffer.
+    -- Since this is lazy loaded it will start after the initial autocmd
+    -- that triggers nvim-lspconfig to attach the lsp
+    vim.api.nvim_exec_autocmds("FileType", {})
 end)

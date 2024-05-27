@@ -45,7 +45,9 @@ vim.opt.breakindent = true
 vim.opt.inccommand = "split"
 
 vim.opt.showmode = false
-vim.opt.clipboard = "unnamedplus"
+MiniDeps.later(function()
+    vim.opt.clipboard = "unnamedplus"
+end)
 
 vim.opt.scrolloff = 10
 vim.opt.sidescrolloff = 10

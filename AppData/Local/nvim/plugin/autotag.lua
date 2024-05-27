@@ -1,18 +1,18 @@
-MiniDeps.add({
-    source = "windwp/nvim-ts-autotag",
-    depends = {
-        {
-            source = "nvim-treesitter/nvim-treesitter",
-            hooks = {
-                post_checkout = function()
-                    vim.cmd("TSUpdate")
-                end,
+MiniDeps.later(function()
+    MiniDeps.add({
+        source = "windwp/nvim-ts-autotag",
+        depends = {
+            {
+                source = "nvim-treesitter/nvim-treesitter",
+                hooks = {
+                    post_checkout = function()
+                        vim.cmd("TSUpdate")
+                    end,
+                },
             },
         },
-    },
-})
+    })
 
-MiniDeps.later(function()
     require("nvim-ts-autotag").setup({
         opts = {
             -- Defaults

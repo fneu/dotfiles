@@ -1,18 +1,18 @@
-MiniDeps.add({
-    source = "nvim-treesitter/nvim-treesitter-textobjects",
-    depends = {
-        {
-            source = "nvim-treesitter/nvim-treesitter",
-            hooks = {
-                post_checkout = function()
-                    vim.cmd("TSUpdate")
-                end,
+MiniDeps.later(function()
+    MiniDeps.add({
+        source = "nvim-treesitter/nvim-treesitter-textobjects",
+        depends = {
+            {
+                source = "nvim-treesitter/nvim-treesitter",
+                hooks = {
+                    post_checkout = function()
+                        vim.cmd("TSUpdate")
+                    end,
+                },
             },
         },
-    },
-})
+    })
 
-MiniDeps.later(function()
     require("nvim-treesitter.install").prefer_git = true
     require("nvim-treesitter.configs").setup({
         ensure_installed = {
