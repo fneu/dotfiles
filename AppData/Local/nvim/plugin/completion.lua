@@ -7,6 +7,7 @@ MiniDeps.later(function()
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-nvim-lsp-signature-help",
+            "hrsh7th/cmp-omni",
             "L3MON4D3/LuaSnip",
             "saadparwaiz1/cmp_luasnip",
         },
@@ -88,5 +89,17 @@ MiniDeps.later(function()
     -- prevent slow completion blocking cmdline
     cmp.setup.cmdline(":", {
         enabled = false,
+    })
+
+    -- wiki.vim link completion
+    cmp.setup.filetype("markdown", {
+        sources = {
+            { name = "nvim_lsp" },
+            { name = "nvim_lsp_signature_help" },
+            { name = "luasnip" },
+            { name = "path" },
+            { name = "buffer", keyword_length = 3 },
+            { name = "omni" },
+        },
     })
 end)
