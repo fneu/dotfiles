@@ -23,6 +23,7 @@ MiniDeps.later(function()
         ["<plug>(wiki-page-delete)"] = "<leader>wd",
         ["<plug>(wiki-page-rename)"] = "<leader>wr",
         ["<plug>(wiki-tags)"] = "<leader>wt",
+        ["<plug>(wiki-link-add)"] = "<leader>wa",
         ["<plug>(wiki-link-next)"] = "<tab>",
         ["<plug>(wiki-link-follow)"] = "<cr>",
         ["<plug>(wiki-link-prev)"] = "<s-tab>",
