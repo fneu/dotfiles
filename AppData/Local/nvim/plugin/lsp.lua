@@ -23,8 +23,6 @@ MiniDeps.later(function()
 
     -- add language servers here
     local servers = {
-        -- TODO: manually roll back version to v1.39.8
-        -- https://github.com/OmniSharp/omnisharp-roslyn/issues/2574
         omnisharp = {
             settings = {
                 Cs = {
@@ -66,6 +64,10 @@ MiniDeps.later(function()
                 },
             },
         },
+        angularls = {
+            root_dir = require("lspconfig.util").root_pattern("angular.json", "nx.json", "project.json"),
+            filetypes = { "html", "angular.html", "typescript", "javascript" },
+        },
     }
 
     -- add other tools here
@@ -86,6 +88,9 @@ MiniDeps.later(function()
     })
 
     require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+    -- since mason-tool-installer apparently does not run if initialized lazily
+    -- https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim/issues/39
+    vim.api.nvim_command("MasonToolsInstall")
 
     require("mason-lspconfig").setup({
         handlers = {
