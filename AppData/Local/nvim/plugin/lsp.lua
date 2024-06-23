@@ -68,6 +68,7 @@ MiniDeps.later(function()
             root_dir = require("lspconfig.util").root_pattern("angular.json", "nx.json", "project.json"),
             filetypes = { "html", "angular.html", "typescript", "javascript" },
         },
+        hls = {},
     }
 
     -- add other tools here
@@ -85,6 +86,7 @@ MiniDeps.later(function()
         "isort",
         "black",
         "csharpier",
+        "ormolu",
     })
 
     require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
