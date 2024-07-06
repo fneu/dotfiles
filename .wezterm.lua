@@ -164,9 +164,9 @@ config.keys = {
 	{ key = "RightArrow", mods = "SHIFT|CTRL", action = act.AdjustPaneSize({ "Right", 1 }) },
 
 	-- Workspaces
-	{ key = "g", mods = "ALT|SHIFT", action = wezterm.action.ShowLauncherArgs({ flags = "WORKSPACES" }) },
+	{ key = "p", mods = "ALT|SHIFT", action = wezterm.action.ShowLauncherArgs({ flags = "WORKSPACES" }) },
 	{
-		key = "g",
+		key = "p",
 		mods = "ALT",
 		action = wezterm.action_callback(function(window, pane)
 			local projects = {}
