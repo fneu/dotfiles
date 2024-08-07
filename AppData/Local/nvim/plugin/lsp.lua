@@ -69,6 +69,7 @@ MiniDeps.later(function()
             filetypes = { "html", "angular.html", "typescript", "javascript" },
         },
         hls = {},
+        tsserver = {},
     }
 
     -- add other tools here
