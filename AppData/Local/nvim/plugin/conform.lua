@@ -9,6 +9,7 @@ MiniDeps.later(function()
             python = { "black" },
             cs = { "csharpier" },
             haskell = { "ormolu" },
+            xml = { "xmlformat" },
         },
     })
 

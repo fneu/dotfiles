@@ -88,6 +88,7 @@ MiniDeps.later(function()
         "black",
         "csharpier",
         "ormolu",
+        "xmlformatter",
     })
 
     require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
