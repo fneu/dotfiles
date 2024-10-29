@@ -86,7 +86,7 @@ MiniDeps.later(function()
         "isort",
         "black",
         "csharpier",
-        "ormolu",
+        -- "ormolu", -- needs v 0.7.5.0 for GHC2024, install manually with cabal
         "xmlformatter",
     })
 
