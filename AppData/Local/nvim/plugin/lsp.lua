@@ -68,8 +68,7 @@ MiniDeps.later(function()
             root_dir = require("lspconfig.util").root_pattern("angular.json", "nx.json", "project.json"),
             filetypes = { "html", "angular.html", "typescript", "javascript" },
         },
-        hls = {},
-        tsserver = {},
+        ts_ls = {},
     }
 
     -- add other tools here
