@@ -1,4 +1,4 @@
-MiniDeps.later(function()
+MiniDeps.now(function()
     MiniDeps.add("lervag/wiki.vim")
 
     local wiki_root = vim.fn.expand("~/Nextcloud/Notizen")
