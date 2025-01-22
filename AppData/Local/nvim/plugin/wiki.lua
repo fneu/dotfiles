@@ -28,6 +28,6 @@ MiniDeps.later(function()
         ["<plug>(wiki-link-follow)"] = "<cr>",
         ["<plug>(wiki-link-prev)"] = "<s-tab>",
         ["<plug>(wiki-link-return)"] = "<bs>",
-        ["x_<plug>(wiki-link-toggle-visual)"] = "<cr>",
+        ["x_<plug>(wiki-link-transform-visual)"] = "<cr>",
     }
 end)
