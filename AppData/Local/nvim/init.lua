@@ -142,6 +142,9 @@ vim.keymap.set(
     { expr = true, desc = "select last inserted/pasted text" }
 )
 
+-- insert current date
+vim.keymap.set("i", "<C-d>", "<C-r>=strftime('%F')<CR>", { desc = "insert current [D]ate" })
+
 -- escape the terminal
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>")
 -- TODO: are these necessary?
