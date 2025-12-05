@@ -59,7 +59,7 @@ export COMMAND_NOT_FOUND_AUTO=1
 # custom virtualenv prompt
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 virtualenv_info() {
-    [[ -n "$VIRTUAL_ENV" ]] && echo "(\[\033[0;31m\]${VIRTUAL_ENV##*/}\[\033[0m\])"
+    [[ -n "$VIRTUAL_ENV_PROMPT" ]] && echo "(\[\033[0;31m\]${VIRTUAL_ENV_PROMPT##*/}\[\033[0m\])"
 }
 
 # custom git prompt
