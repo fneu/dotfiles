@@ -1,5 +1,0 @@
-require("options")
-require("funcs")
-require("keymaps")
-require("plugins")
-require("autocmds")
