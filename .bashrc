@@ -59,7 +59,12 @@ export COMMAND_NOT_FOUND_AUTO=1
 # custom virtualenv prompt
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 virtualenv_info() {
-    [[ -n "$VIRTUAL_ENV_PROMPT" ]] && echo "(\[\033[0;31m\]${VIRTUAL_ENV_PROMPT##*/}\[\033[0m\])"
+    [[ -n "$VIRTUAL_ENV_PROMPT" ]] && echo "(\[\033[0;31m\]${VIRTUAL_ENV_PROMPT##*/}\[\033[0m\]) "
+}
+
+# wsl check
+wsl_info() {
+    [[ -f "/etc/wsl.conf" ]] && echo "\[\033[1;32m\]WSL\[\033[0m\]:"
 }
 
 # custom git prompt
@@ -94,7 +99,7 @@ git_info() {
 #PS1='[\u@\h \W]\$ '
 
 set_bash_prompt(){
-	PS1="$(virtualenv_info)\[\033[1;35m\]\u\[\033[0m\]@\[\033[1;34m\]\H\[\033[0m\]:\[\033[1;36m\]\w\[\033[0m\]$(git_info)> "
+	PS1="$(virtualenv_info)$(wsl_info)\[\033[1;36m\]\w\[\033[0m\]$(git_info)> "
 }
 
 PROMPT_COMMAND=set_bash_prompt
