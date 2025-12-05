@@ -25,6 +25,8 @@ This might fail if some files are already present. Rename or delete them.
 
 ```config config --local status.showUntrackedFiles no```
 
+- If it's a work machine and work is using dev.azure, create `~/.gitconfig-work` with name and email details
+
 - done! From now on, the `config` (git) command can be used to manage the dotfiles 
 
 I found this approach in [this](https://www.atlassian.com/git/tutorials/dotfiles) blogpost

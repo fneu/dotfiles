@@ -1,0 +1,17 @@
+[user]
+	name = Fabian Neuschmidt
+	email = fabian@neuschmidt.de
+[includeIf "hasconfig:remote.*.url:https://**@dev.azure.com/**"]
+	path = ~/.gitconfig-work
+[core]
+	editor = vim
+[rerere]
+	enabled = true
+[help]
+	autocorrect = 10
+[init]
+	defaultBranch = main
+[push]
+	autoSetupRemote = true
+[pull]
+	ff = only
