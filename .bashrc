@@ -10,9 +10,14 @@ bind 'TAB:menu-complete'
 # dotfile management with config as a git alias
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
+# Haskell
+[ -f "/c/ghcup/env" ] && . "/c/ghcup/env" # ghcup-env
+
 # FZF fuzzy file search for fzf 44 (WSL Ubuntu)
 # this might change for different versions of fzf
 [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
+# never versions:
+eval "$(fzf --bash)"
 
 # ls colors
 LS_COLORS="$LS_COLORS:ow=1;34;47:"
