@@ -13,12 +13,6 @@ alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 # Haskell
 [ -f "/c/ghcup/env" ] && . "/c/ghcup/env" # ghcup-env
 
-# FZF fuzzy file search for fzf 44 (WSL Ubuntu)
-# this might change for different versions of fzf
-[ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
-# never versions:
-eval "$(fzf --bash)"
-
 # ls colors
 LS_COLORS="$LS_COLORS:ow=1;34;47:"
 alias ls='ls --color=auto --group-directories-first'
@@ -108,3 +102,6 @@ set_bash_prompt(){
 }
 
 PROMPT_COMMAND=set_bash_prompt
+
+# FZF fuzzy file search for fzf
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
