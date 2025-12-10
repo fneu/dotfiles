@@ -320,7 +320,7 @@ function! ActiveStatus()
   let statusline.="%5*"
   let statusline.=""
   let statusline.="%2*"
-  let statusline.="%{fugitive#head()!=''?'\ \ '.fugitive#head().'\ ':''}"
+  let statusline.="%{FugitiveStatusline()!=''?'\ \ '.FugitiveStatusline().'\ ':''}"
   let statusline.="%3*"
   let statusline.=""
   let statusline.="%4*"
@@ -345,7 +345,7 @@ endfunction
 function! InactiveStatus()
   let statusline=""
   let statusline.="%(%{'help'!=&filetype?'\ \ '.bufnr('%').'\ \ ':'\ '}%)"
-  let statusline.="%{fugitive#head()!=''?'\ \ '.fugitive#head().'\ ':'\ '}"
+  let statusline.="%{FugitiveStatusline()!=''?'\ \ '.FugitiveStatusline().'\ ':'\ '}"
   let statusline.="\ %<"
   let statusline.="%f"
   let statusline.="%{&modified?'\ \ +':''}"
