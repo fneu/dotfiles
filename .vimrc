@@ -124,6 +124,20 @@ if (has("termguicolors"))
   set termguicolors
 endif
 
+" gvim font and ui
+if has("gui_running")
+    set guifont=Berkeley\ Mono:h12
+    if has("win32")
+        " for ligatures in gvim, disabled due to visual glitches: https://github.com/vim/vim/issues/12901
+        " set renderoptions=type:directx
+    endif
+endif
+set guioptions-=m                   " menu bar
+set guioptions-=T                   " toolbar
+set guioptions-=r                   " scrollbar right
+set guioptions-=L                   " scrollbar left
+set guioptions-=e                   " tab bar
+
 let g:adapted_terminal_bold = 1
 let g:adapted_terminal_italic = 1
 if !exists('g:first_use')
