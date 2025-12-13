@@ -17,7 +17,7 @@ endif
 call plug#begin()
 
 " colorscheme
-Plug 'fneu/adapted'
+Plug 'patstockwell/vim-monokai-tasty'
 
 " tools / editing
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -30,13 +30,10 @@ Plug 'tpope/vim-vinegar'            " netrw improvements
 Plug 'tpope/vim-unimpaired'         " various ]/[ bindings
 Plug 'tpope/vim-eunuch'             " :SudoWrite, :Unlink, :Rename, ...
 Plug 'wincent/terminus'             " FocusGained and cursor shape in Konsole
-Plug 'vimwiki/vimwiki'
-Plug 'mattn/emmet-vim'              " html magic with <C-y>
 Plug 'ap/vim-css-color'             " highlight colors in various file types
-Plug 'Yggdroot/indentLine'
 
 " languages
-Plug 'hynek/vim-python-pep8-indent' " PEP8 conform indenting
+Plug 'Vimjas/vim-python-pep8-indent' " PEP8 conform indenting
 Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 Plug 'HerringtonDarkholme/yats.vim' " TypeScript Syntax
 Plug 'othree/html5.vim'             " Html5 Syntax
@@ -90,7 +87,7 @@ set sidescrolloff=5
 set display+=lastline               " show part of long last line (and marker)
 
 set encoding=utf-8
-set showbreak=↪\ "
+set showbreak=↪\                    " continuation after wrapped lines
 set listchars=tab:→\ ,nbsp:␣,trail:·,extends:›,precedes:‹
 set list                            " highlight above chars respectively
 set formatoptions+=j                " delete comment char when joining lines
@@ -98,8 +95,8 @@ set formatoptions+=j                " delete comment char when joining lines
 set autoread                        " auto load file changes, needs terminus
 
 set history=1000                    " command-line history
-set nobackup
-set noswapfile
+set nobackup                        " no file.txt~ backup of last written save
+set noswapfile                      " no .swp created while editing
 
 set t_vb=                           " no terminal visual bell
 
@@ -110,9 +107,7 @@ set undodir=~/.vim/undo-dir
 set undofile                        " keep undo history (forever)
 
 set mouse=a                         " use mouse in all modes
-if has('unnamedplus')
-  set clipboard=unnamed,unnamedplus " use system clipboard
-endif
+set clipboard=unnamed,unnamedplus   " use system clipboard
 
 " VISUAL
 
@@ -128,8 +123,7 @@ endif
 if has("gui_running")
     set guifont=Berkeley\ Mono:h12
     if has("win32")
-        " for ligatures in gvim, disabled due to visual glitches: https://github.com/vim/vim/issues/12901
-        " set renderoptions=type:directx
+        set renderoptions=type:directx
     endif
 endif
 set guioptions-=m                   " menu bar
@@ -138,10 +132,9 @@ set guioptions-=r                   " scrollbar right
 set guioptions-=L                   " scrollbar left
 set guioptions-=e                   " tab bar
 
-let g:adapted_terminal_bold = 1
-let g:adapted_terminal_italic = 1
+let g:vim_monokai_tasty_italic = 1
 if !exists('g:first_use')
-    colorscheme adapted
+    colorscheme vim-monokai-tasty
 endif
 
 " MAPPINGS
@@ -292,21 +285,6 @@ highlight ALEWarning guibg=#3E2723
 nmap <silent> [c <Plug>(ale_previous_wrap)
 nmap <silent> ]c <Plug>(ale_next_wrap)
 
-" indentLine:
-let g:indentLine_char = '│'
-let g:indentLine_faster = 1
-let g:indentLine_color_gui = '#ddddc5'
-" let indentLine use current conceal options
-" let g:indentLine_conceallevel  = &conceallevel -> disables conceal
-let g:indentLine_concealcursor = &concealcursor
-
-" vimwiki
-let g:vimwiki_list = [{'path': '/mnt/daten/GDrive/vimwiki/wiki/',
-  \ 'path_html': '/mnt/daten/GDrive/vimwiki/html/',
-  \ 'syntax': 'markdown',
-  \ 'ext': '.md',
-  \ 'custom_wiki2html': '/home/fabian/devel/dotfiles/bin/wiki2html.sh'}]
-
 " LANGUAGE SPECIFIC SETTINGS
 
 let python_highlight_all = 1
@@ -319,7 +297,6 @@ augroup languages
     autocmd FileType json setlocal sts=2 sw=2 expandtab
     autocmd FileType typescript setlocal sts=2 sw=2
     autocmd FileType css setlocal sts=2 sw=2
-    autocmd FileType vimwiki setlocal number
 augroup END
 
 " STATUSLINE
