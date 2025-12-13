@@ -30,7 +30,7 @@ export LESS='-MRi#8j.5'
 #             `------ show more information in promp
 
 # grep
-alias grep='grep --color --binary-files=without-match --exclude-dir .git'
+alias grep='grep --color --binary-files=without-match --exclude-dir .git --exclude-dir .venv'
 
 # git
 alias g='git'
