@@ -1,11 +1,15 @@
 #
 # ~/.bashrc
 #
-bind 'set show-all-if-ambiguous on'
-bind 'TAB:menu-complete'
-
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
+
+# completion behaviour
+bind 'set show-all-if-ambiguous on'         # show matching completions
+bind 'set menu-complete-display-prefix on'  # complete only common part on first press
+bind 'TAB:menu-complete'                    # cycle through available completions after
+bind 'set colored-stats on'  # completion menu is colored (dirs, executables)
+bind 'set colored-completion-prefix on'  # search string is colored in menu
 
 # dotfile management with config as a git alias
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
