@@ -17,7 +17,7 @@ endif
 call plug#begin()
 
 " colorscheme
-Plug 'patstockwell/vim-monokai-tasty'
+Plug 'fneu/breezy'
 
 " tools / editing
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -134,7 +134,8 @@ set guioptions-=e                   " tab bar
 
 let g:vim_monokai_tasty_italic = 1
 if !exists('g:first_use')
-    colorscheme vim-monokai-tasty
+    set background=light
+    colorscheme breezy
 endif
 
 " MAPPINGS
