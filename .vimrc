@@ -98,7 +98,7 @@ set history=1000                    " command-line history
 set nobackup                        " no file.txt~ backup of last written save
 set noswapfile                      " no .swp created while editing
 
-set t_vb=                           " no terminal visual bell
+set belloff=all                     " no terminal visual bell
 
 if !isdirectory($HOME."/.vim/undo-dir")
     call mkdir($HOME."/.vim/undo-dir", "", 0700)
