@@ -185,12 +185,9 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
 
 " search
-nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader>f :GFiles<CR>
+nnoremap <silent> <leader><S-f> :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
-if executable('rg')
-    command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
-    nnoremap <silent> <leader><S-f> :Find<CR>
-endif
 
 "put date
 nnoremap <leader>z A,<esc>"=strftime("%c")<CR>P
@@ -198,15 +195,13 @@ nnoremap <leader>z A,<esc>"=strftime("%c")<CR>P
 " PLUGIN SETTINGS
 
 " fzf
-"run fzf in current window -> DISABLED BECAUSE IT BREAKS ARROW KEYS
-" let g:fzf_layout = { 'window': 'enew' }
+"run fzf in current window
+let g:fzf_layout = { 'window': 'enew' }
 " quit fzf with <esc>
 augroup fzf
     autocmd!
     autocmd FileType fzf tnoremap <nowait><buffer> <esc> <c-g>
 augroup END
-" ignore some potentially large folders
-let $FZF_DEFAULT_COMMAND =  "find * -path '*/\.*' -prune -o -path 'node_modules/**' -prune -o -path 'target/**' -prune -o -path 'dist/**' -prune -o  -type f -print -o -type l -print 2> /dev/null"
 " use ripgrep if available
 if executable('rg')
   let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
