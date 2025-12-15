@@ -297,9 +297,6 @@ augroup END
 
 " STATUSLINE
 
-" highlight StatusLineNC guifg=#546e7a guibg=#37474f
-highlight StatusLineNC guifg=#37474f guibg=#607D8B
-
 function! ActiveStatus()
   let statusline=""
   let statusline.="%1*"
@@ -349,11 +346,11 @@ endfunction
 
 set laststatus=2
 set statusline=%!ActiveStatus()
-hi User1 guibg=#4db6ac guifg=#37474f
-hi User5 guibg=#607d8b guifg=#4db6ac
-hi User2 guibg=#607d8b guifg=#cfd8dc
-hi User3 guibg=#455a64 guifg=#607d8b
-hi User4 guibg=#455a64 guifg=#b0bec5
+hi User1 guibg=#2d5c76 guifg=#cfcfc2
+hi User5 guibg=#232629 guifg=#2d5c76
+hi User2 guibg=#232629 guifg=#7a7c7d
+hi User3 guibg=#31363b guifg=#232629
+hi User4 guibg=#31363b guifg=#a5a6a8
 
 augroup status
   autocmd!
