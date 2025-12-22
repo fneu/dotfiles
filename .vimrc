@@ -40,17 +40,12 @@ Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 Plug 'HerringtonDarkholme/yats.vim' " TypeScript Syntax
 Plug 'othree/html5.vim'             " Html5 Syntax
 Plug 'othree/yajs.vim'              " JavaScript Syntax
-" linting
-Plug 'w0rp/ale'                     " better configuration than LSP
 " completion / LSP
-Plug 'prabirshrestha/async.vim'
+Plug 'dense-analysis/ale'                     " better configuration than LSP
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-file.vim'
 Plug 'prabirshrestha/asyncomplete-buffer.vim'
 Plug 'yami-beta/asyncomplete-omni.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'Shougo/echodoc.vim'             " function signatures for completed items
 
 call plug#end()
 
@@ -77,9 +72,10 @@ set nrformats-=octal                " prevent <C-A> from skipping 8 and 9
 
 set ttimeout                        " don't wait forever on key codes like esc
 set ttimeoutlen=100
+set updatetime=400                  " timeout for cursorhold
 
 set shortmess+=c                    " suppress ins-complete-menu messages
-set noshowmode                      " suppress mode messages -> use for echodoc
+set noshowmode                      " suppress mode messages -> use for ale signature help
 set wildmenu                        " command line completion
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 set ruler                           " show current position in statusline
@@ -101,6 +97,8 @@ set nobackup                        " no file.txt~ backup of last written save
 set noswapfile                      " no .swp created while editing
 
 set belloff=all                     " no terminal visual bell
+
+set hidden                          " allow leaving unsaved buffer (gd)
 
 if !isdirectory($HOME."/.vim/undo-dir")
     call mkdir($HOME."/.vim/undo-dir", "", 0700)
@@ -147,16 +145,13 @@ let mapleader = " "
 " follow tags, help, etc.
 nnoremap <leader>t <C-]>
 
-" goto Definition
-nnoremap <leader>d :LspDefinition<CR>
-
 " center after search
 nnoremap n nzz
 nnoremap N Nzz
 
 " use <C-l> to clear the highlighting of :hlsearch
 nnoremap <silent> <C-l>
-\ :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
+\ :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>:pclose<CR>
 
 " move selected lines
 vnoremap J :m '>+1<CR>gv=gv
@@ -182,17 +177,15 @@ nnoremap <Leader>gr :Gremove<CR>
 nnoremap <Leader>o :.Gbrowse<CR>
 
 " completion:
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+imap <c-space> <Plug>(asyncomplete_force_refresh)
 
 " search
 nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader><S-f> :Rg<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
-
-"put date
-nnoremap <leader>z A,<esc>"=strftime("%c")<CR>P
 
 " copilot
 imap <silent> <C-l> <Plug>(copilot-dismiss)
@@ -202,6 +195,20 @@ imap <silent> <M-l> <Plug>(copilot-accept-line)
 " copilot chat
 nnoremap <leader>c :CopilotChatOpen<CR>
 vmap <leader>a <Plug>CopilotChatAddSelection
+
+" LSP
+nmap <silent> gd <Plug>(ale_go_to_definition)
+nmap <silent> K <Plug>(ale_hover)
+nmap <silent> cd :ALERename<CR>
+nmap <silent> <leader>rn :ALERename<CR>
+nmap <silent> grn :ALERename<CR>
+nmap <silent> [d <Plug>(ale_previous_wrap)
+nmap <silent> ]d <Plug>(ale_next_wrap)
+nmap <silent> g. :ALECodeAction<CR>
+nmap <silent> gI <Plug>(ale_import)
+nmap <silent> gA <Plug>(ale_find_references)
+nmap <silent> gh <Plug>(ale_detail)
+
 
 " PLUGIN SETTINGS
 
@@ -219,67 +226,14 @@ if executable('rg')
   set grepprg=rg\ --vimgrep
 endif
 
-" vim-lsp
-augroup lsp
-    autocmd!
-    " python
-    if executable('pyls')
-        " pip install python-language-server
-        autocmd User lsp_setup call lsp#register_server({
-            \ 'name': 'pyls',
-            \ 'cmd': {server_info->['pyls']},
-            \ 'whitelist': ['python'],
-            \ })
-    endif
-    " typescript
-    if executable('typescript-language-server')
-        " npm install -g typescript typescript-language-server
-        au User lsp_setup call lsp#register_server({
-            \ 'name': 'typescript-language-server',
-            \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-            \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-            \ 'whitelist': ['typescript'],
-            \ })
-endif
-augroup END
-
-" asyncomplete
-let g:asyncomplete_remove_duplicates = 1
-augroup asyncomplete
-    autocmd!
-    " filepath completion
-    autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-        \ 'name': 'file',
-        \ 'whitelist': ['*'],
-        \ 'priority': 10,
-        \ 'completor': function('asyncomplete#sources#file#completor')
-        \ }))
-    " buffer completion
-    autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-        \ 'name': 'buffer',
-        \ 'whitelist': ['*'],
-        \ 'completor': function('asyncomplete#sources#buffer#completor'),
-        \ }))
-    " omni completion
-    autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
-        \ 'name': 'omni',
-        \ 'whitelist': ['*'],
-        \ 'blacklist': ['python'],
-        \ 'completor': function('asyncomplete#sources#omni#completor')
-        \  }))
-augroup END
-
-" echodoc
-let g:echodoc_enable_at_startup = 1
-
 " ALE
 let g:ale_linters = {
-        \ 'python': ['flake8'],
-        \ 'html': ['htmlhint'],
+        \ 'python': ['ruff', 'pylsp'],
         \}
 let g:ale_fixers = {
-        \ 'python': ['isort', 'yapf'],
+        \ 'python': ['ruff', 'black'],
         \}
+let g:ale_fix_on_save=1
 let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '❗'
@@ -289,8 +243,38 @@ highlight ALEWarningSign guifg=#FFEE58
 highlight ALEError guibg=#3E2723
 highlight ALEWarning guibg=#3E2723
 
-nmap <silent> [c <Plug>(ale_previous_wrap)
-nmap <silent> ]c <Plug>(ale_next_wrap)
+" asyncomplete
+let g:asyncomplete_remove_duplicates = 1
+augroup asyncomplete_sources
+    autocmd!
+    " filepath completion
+    autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+        \ 'name': 'file',
+        \ 'whitelist': ['*'],
+        \ 'priority': 10,
+        \ 'completor': function('asyncomplete#sources#file#completor')
+        \ }))
+    " ALE
+    autocmd User asyncomplete_setup call asyncomplete#register_source(
+        \   asyncomplete#sources#ale#get_source_options({
+        \       'priority': 10,
+        \   }))
+    " omni completion
+    autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
+        \ 'name': 'omni',
+        \ 'whitelist': ['*'],
+        \ 'blacklist': ['python'],
+        \ 'completor': function('asyncomplete#sources#omni#completor')
+        \  }))
+    " buffer completion
+    autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+        \ 'name': 'buffer',
+        \ 'whitelist': ['*'],
+        \ 'blacklist': ['python'],
+        \ 'completor': function('asyncomplete#sources#buffer#completor'),
+        \ }))
+augroup END
+
 
 " LANGUAGE SPECIFIC SETTINGS
 
