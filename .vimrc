@@ -29,8 +29,10 @@ Plug 'tpope/vim-repeat'             " make repeat and surround repeatable
 Plug 'tpope/vim-vinegar'            " netrw improvements
 Plug 'tpope/vim-unimpaired'         " various ]/[ bindings
 Plug 'tpope/vim-eunuch'             " :SudoWrite, :Unlink, :Rename, ...
-Plug 'wincent/terminus'             " FocusGained and cursor shape in Konsole
+Plug 'wincent/terminus'             " FocusGained, cursor shape, bracketed paste
 Plug 'ap/vim-css-color'             " highlight colors in various file types
+Plug 'github/copilot.vim'           " AI autocompletion
+Plug 'DanBradbury/copilot-chat.vim' " AI chat interface
 
 " languages
 Plug 'Vimjas/vim-python-pep8-indent' " PEP8 conform indenting
@@ -191,6 +193,15 @@ nnoremap <silent> <leader>b :Buffers<CR>
 
 "put date
 nnoremap <leader>z A,<esc>"=strftime("%c")<CR>P
+
+" copilot
+imap <silent> <C-l> <Plug>(copilot-dismiss)
+imap <silent> <M-w> <Plug>(copilot-accept-word)
+imap <silent> <M-l> <Plug>(copilot-accept-line)
+
+" copilot chat
+nnoremap <leader>c :CopilotChatOpen<CR>
+vmap <leader>a <Plug>CopilotChatAddSelection
 
 " PLUGIN SETTINGS
 
