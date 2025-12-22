@@ -187,8 +187,8 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
 
 " search
-nnoremap <silent> <leader>f :GFiles<CR>
-nnoremap <silent> <leader><S-f> :Files<CR>
+nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader><S-f> :Rg<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 
 "put date
