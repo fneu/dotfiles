@@ -47,6 +47,10 @@ Plug 'prabirshrestha/asyncomplete-file.vim'
 Plug 'prabirshrestha/asyncomplete-buffer.vim'
 Plug 'yami-beta/asyncomplete-omni.vim'
 
+" test / debug
+Plug 'puremourning/vimspector'
+Plug 'vim-test/vim-test'
+
 call plug#end()
 
 packadd! matchit
@@ -209,6 +213,32 @@ nmap <silent> gI <Plug>(ale_import)
 nmap <silent> gA <Plug>(ale_find_references)
 nmap <silent> gh <Plug>(ale_detail)
 
+" Vimspector debug
+" for normal mode - the word under the cursor
+nmap <Leader>di <Plug>VimspectorBalloonEval
+" for visual mode, the visually selected text
+xmap <Leader>di <Plug>VimspectorBalloonEval
+
+" vim-test
+let test#strategy = "vimterminal"
+" nmap <silent> <leader>t :TestNearest<CR>
+" nmap <silent> <leader>T :TestFile<CR>
+" nmap <silent> <leader>a :TestSuite<CR>
+" nmap <silent> <leader>l :TestLast<CR>
+" nmap <silent> <leader>g :TestVisit<CR>
+
+let g:vimspector_install_gadgets = ['debugpy']
+" let g:vimspector_configurations = {
+"     \ 'python': {
+"         \ 'adapter': 'debugpy',
+"         \ 'configuration': {
+"             \ 'request': 'launch',
+"             \ 'type': 'python',
+"             \ 'name': 'Launch file',
+"             \ 'program': '${file}',
+"             \ 'console': 'integratedTerminal',
+"         \ },
+"     \ },
 
 " PLUGIN SETTINGS
 
