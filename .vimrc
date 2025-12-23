@@ -258,7 +258,7 @@ endif
 
 " ALE
 let g:ale_linters = {
-        \ 'python': ['ruff', 'pylsp'],
+        \ 'python': ['ruff', 'jedils'],
         \}
 let g:ale_fixers = {
         \ 'python': ['ruff', 'black'],
