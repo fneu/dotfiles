@@ -259,9 +259,11 @@ endif
 " ALE
 let g:ale_linters = {
         \ 'python': ['ruff', 'jedils'],
+        \ 'haskell': ['hls'],
         \}
 let g:ale_fixers = {
         \ 'python': ['ruff', 'black'],
+        \ 'haskell': ['fourmolu'],
         \}
 let g:ale_fix_on_save=1
 let g:ale_echo_msg_format = '[%linter%] %s'
