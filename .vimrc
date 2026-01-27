@@ -29,6 +29,7 @@ Plug 'tpope/vim-repeat'             " make repeat and surround repeatable
 Plug 'tpope/vim-vinegar'            " netrw improvements
 Plug 'tpope/vim-unimpaired'         " various ]/[ bindings
 Plug 'tpope/vim-eunuch'             " :SudoWrite, :Unlink, :Rename, ...
+Plug 'tpope/vim-abolish'            " Case aware replace; crs, crm, etc. for casing
 Plug 'wincent/terminus'             " FocusGained, cursor shape, bracketed paste
 Plug 'ap/vim-css-color'             " highlight colors in various file types
 Plug 'github/copilot.vim'           " AI autocompletion
@@ -113,6 +114,9 @@ set undofile                        " keep undo history (forever)
 set mouse=a                         " use mouse in all modes
 set clipboard=unnamed,unnamedplus   " use system clipboard
 
+set foldmethod=indent               " fold by indent, overridden later per filetype
+set foldlevel=99                    " start with all folds open
+
 " VISUAL
 
 " for vim 7
@@ -125,9 +129,9 @@ endif
 
 " gvim font and ui
 if has("gui_running")
-    set guifont=Berkeley\ Mono:h12
+    set guifont=Berkeley\ Mono:h11
     if has("win32")
-        set renderoptions=type:directx
+        " set renderoptions=type:directx
     endif
 endif
 set guioptions-=m                   " menu bar
@@ -147,7 +151,7 @@ endif
 let mapleader = " "
 
 " follow tags, help, etc.
-nnoremap <leader>t <C-]>
+nnoremap <leader><CR> <C-]>
 
 " center after search
 nnoremap n nzz
@@ -203,9 +207,7 @@ vmap <leader>a <Plug>CopilotChatAddSelection
 " LSP
 nmap <silent> gd <Plug>(ale_go_to_definition)
 nmap <silent> K <Plug>(ale_hover)
-nmap <silent> cd :ALERename<CR>
 nmap <silent> <leader>rn :ALERename<CR>
-nmap <silent> grn :ALERename<CR>
 nmap <silent> [d <Plug>(ale_previous_wrap)
 nmap <silent> ]d <Plug>(ale_next_wrap)
 nmap <silent> g. :ALECodeAction<CR>
@@ -221,11 +223,12 @@ xmap <Leader>di <Plug>VimspectorBalloonEval
 
 " vim-test
 let test#strategy = "vimterminal"
-" nmap <silent> <leader>t :TestNearest<CR>
-" nmap <silent> <leader>T :TestFile<CR>
-" nmap <silent> <leader>a :TestSuite<CR>
-" nmap <silent> <leader>l :TestLast<CR>
-" nmap <silent> <leader>g :TestVisit<CR>
+let test#vim#term_position = "belowright 12"
+nmap <silent> <leader>tn :TestNearest<CR>
+nmap <silent> <leader>tf :TestFile<CR>
+nmap <silent> <leader>ta :TestSuite<CR>
+nmap <silent> <leader>tl :TestLast<CR>
+nmap <silent> <leader>tv :TestVisit<CR>
 
 let g:vimspector_install_gadgets = ['debugpy']
 " let g:vimspector_configurations = {
@@ -258,11 +261,11 @@ endif
 
 " ALE
 let g:ale_linters = {
-        \ 'python': ['ruff', 'jedils'],
+        \ 'python': ['ruff', 'pyright'],
         \ 'haskell': ['hls'],
         \}
 let g:ale_fixers = {
-        \ 'python': ['black'],
+        \ 'python': ['autoimport', 'isort', 'black', 'ruff'],
         \ 'haskell': ['fourmolu'],
         \}
 let g:ale_fix_on_save=1
@@ -270,10 +273,10 @@ let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '❗'
 
-highlight ALEErrorSign guifg=#EF5350
-highlight ALEWarningSign guifg=#FFEE58
-highlight ALEError guibg=#3E2723
-highlight ALEWarning guibg=#3E2723
+let g:ale_python_auto_uv = 1
+let g:ale_references_use_fzf = 0  " file preview helps, but it is not kept open
+let g:ale_floating_preview = 0 " float. window is close to the cursor, but closes on next action
+
 
 " asyncomplete
 let g:asyncomplete_remove_duplicates = 1
@@ -316,8 +319,8 @@ augroup languages
     autocmd!
     autocmd FileType make setlocal noexpandtab
     autocmd Filetype html setlocal sts=2 sw=2 expandtab
-    autocmd FileType python setlocal colorcolumn=79
-    autocmd FileType json setlocal sts=2 sw=2 expandtab
+    autocmd FileType python setlocal colorcolumn=99
+    autocmd FileType json setlocal sts=2 sw=2 expandtab foldmethod=syntax
     autocmd FileType typescript setlocal sts=2 sw=2
     autocmd FileType css setlocal sts=2 sw=2
 augroup END
