@@ -44,7 +44,7 @@ Plug 'othree/yajs.vim'              " JavaScript Syntax
 " completion / LSP
 "
 " https://github.com/dense-analysis/ale/pull/5078
-Plug 'spaceone/ale', { 'branch': 'feat/python/ty' }                     " better configuration than LSP
+Plug 'dense-analysis/ale'
 
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-file.vim'
@@ -264,9 +264,23 @@ if executable('rg')
   set grepprg=rg\ --vimgrep
 endif
 
+
+" diagnostics currently need a fix in:
+" ~/vimfiles/plugged/ale/autoload/ale/lsp_linter.vim line 573:
+" if ale#lsp#HasCapability(l:id, 'pull_model') || a:linter.name is# 'ty'
+" see https://github.com/dense-analysis/ale/issues/4971
+
+call ale#linter#Define('python', {
+\   'name': 'ty',
+\   'lsp': 'stdio',
+\   'executable': 'ty',
+\   'command': 'ty server',
+\   'project_root': function('ale#python#FindProjectRoot'),
+\})
+
 " ALE
 let g:ale_linters = {
-        \ 'python': ['pyright', 'ruff', 'ty'],
+        \ 'python': ['ty', 'ruff'],
         \ 'haskell': ['hls'],
         \ 'json': ['jq'],
         \}
