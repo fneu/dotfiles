@@ -42,7 +42,10 @@ Plug 'HerringtonDarkholme/yats.vim' " TypeScript Syntax
 Plug 'othree/html5.vim'             " Html5 Syntax
 Plug 'othree/yajs.vim'              " JavaScript Syntax
 " completion / LSP
-Plug 'dense-analysis/ale'                     " better configuration than LSP
+"
+" https://github.com/dense-analysis/ale/pull/5078
+Plug 'spaceone/ale', { 'branch': 'feat/python/ty' }                     " better configuration than LSP
+
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-file.vim'
 Plug 'prabirshrestha/asyncomplete-buffer.vim'
@@ -194,6 +197,7 @@ imap <c-space> <Plug>(asyncomplete_force_refresh)
 nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader><S-f> :Rg<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader><leader> :History<CR>
 
 " copilot
 imap <silent> <C-l> <Plug>(copilot-dismiss)
@@ -212,8 +216,9 @@ nmap <silent> [d <Plug>(ale_previous_wrap)
 nmap <silent> ]d <Plug>(ale_next_wrap)
 nmap <silent> g. :ALECodeAction<CR>
 nmap <silent> gI <Plug>(ale_import)
-nmap <silent> gA <Plug>(ale_find_references)
+nmap <silent> gA :ALEFindReferences -quickfix<CR>:copen<CR>
 nmap <silent> gh <Plug>(ale_detail)
+nmap <silent> <leader>gq :ALEFix<CR>
 
 " Vimspector debug
 " for normal mode - the word under the cursor
@@ -261,14 +266,17 @@ endif
 
 " ALE
 let g:ale_linters = {
-        \ 'python': ['ruff', 'pyright'],
+        \ 'python': ['pyright', 'ruff', 'ty'],
         \ 'haskell': ['hls'],
+        \ 'json': ['jq'],
         \}
 let g:ale_fixers = {
-        \ 'python': ['autoimport', 'isort', 'black', 'ruff'],
+        \ 'python': ['black', 'ruff'],
         \ 'haskell': ['fourmolu'],
+        \ 'json': ['jq'],
         \}
 let g:ale_fix_on_save=1
+let ale_fix_on_save_ignore = ['jq']
 let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '❗'
@@ -276,6 +284,12 @@ let g:ale_sign_warning = '❗'
 let g:ale_python_auto_uv = 1
 let g:ale_references_use_fzf = 0  " file preview helps, but it is not kept open
 let g:ale_floating_preview = 0 " float. window is close to the cursor, but closes on next action
+
+let g:ale_type_map = {
+\ 'ty': {
+\   'E': 'W',
+\ },
+\}
 
 
 " asyncomplete
