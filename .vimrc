@@ -52,7 +52,6 @@ Plug 'prabirshrestha/asyncomplete-buffer.vim'
 Plug 'yami-beta/asyncomplete-omni.vim'
 
 " test / debug
-Plug 'puremourning/vimspector'
 Plug 'vim-test/vim-test'
 
 call plug#end()
@@ -220,12 +219,6 @@ nmap <silent> gA :ALEFindReferences -quickfix<CR>:copen<CR>
 nmap <silent> gh <Plug>(ale_detail)
 nmap <silent> <leader>gq :ALEFix<CR>
 
-" Vimspector debug
-" for normal mode - the word under the cursor
-nmap <Leader>di <Plug>VimspectorBalloonEval
-" for visual mode, the visually selected text
-xmap <Leader>di <Plug>VimspectorBalloonEval
-
 " vim-test
 let test#strategy = "vimterminal"
 let test#vim#term_position = "belowright 12"
@@ -235,18 +228,6 @@ nmap <silent> <leader>ta :TestSuite<CR>
 nmap <silent> <leader>tl :TestLast<CR>
 nmap <silent> <leader>tv :TestVisit<CR>
 
-let g:vimspector_install_gadgets = ['debugpy']
-" let g:vimspector_configurations = {
-"     \ 'python': {
-"         \ 'adapter': 'debugpy',
-"         \ 'configuration': {
-"             \ 'request': 'launch',
-"             \ 'type': 'python',
-"             \ 'name': 'Launch file',
-"             \ 'program': '${file}',
-"             \ 'console': 'integratedTerminal',
-"         \ },
-"     \ },
 
 " PLUGIN SETTINGS
 
