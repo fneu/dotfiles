@@ -51,8 +51,10 @@ Plug 'prabirshrestha/asyncomplete-file.vim'
 Plug 'prabirshrestha/asyncomplete-buffer.vim'
 Plug 'yami-beta/asyncomplete-omni.vim'
 
-" test / debug
-Plug 'vim-test/vim-test'
+" Features
+Plug 'vim-test/vim-test'  " pytest
+Plug 'lervag/wiki.vim'
+Plug 'sharat87/roast.vim' " http requests
 
 call plug#end()
 
@@ -319,6 +321,15 @@ augroup asyncomplete_sources
         \ }))
 augroup END
 
+
+" Wiki
+if exists("$WIKI_ROOT") && !empty($WIKI_ROOT)
+    let g:wiki_root = $WIKI_ROOT
+else
+    echohl WarningMsg
+    echom "Warning: Environment variable WIKI_ROOT is not set."
+    echohl None
+endif
 
 " LANGUAGE SPECIFIC SETTINGS
 
