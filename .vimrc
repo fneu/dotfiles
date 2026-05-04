@@ -179,14 +179,9 @@ xmap ä ]
 
 " git
 nnoremap <Leader>ga :Gwrite<CR>
-nnoremap <Leader>gc :Gcommit<CR>
-nnoremap <Leader>gsh :Gpush<CR>
-nnoremap <Leader>gll :Gpull<CR>
-nnoremap <Leader>gs :Gstatus<CR>
-nnoremap <Leader>gb :Gblame<CR>
+nnoremap <Leader>gg :Git<CR>
+nnoremap <Leader>gb :Git blame<CR>
 nnoremap <Leader>gd :Gvdiff<CR>
-nnoremap <Leader>gr :Gremove<CR>
-nnoremap <Leader>o :.Gbrowse<CR>
 
 " completion:
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -229,6 +224,12 @@ nmap <silent> <leader>tf :TestFile<CR>
 nmap <silent> <leader>ta :TestSuite<CR>
 nmap <silent> <leader>tl :TestLast<CR>
 nmap <silent> <leader>tv :TestVisit<CR>
+
+" show highlight
+nmap <silent> <leader>h :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
+    \ . '> trans<' . synIDattr(synID(line("."),col("."),0),"name")
+    \ . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name")
+    \ . ">"<CR>
 
 
 " PLUGIN SETTINGS
