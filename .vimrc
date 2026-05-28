@@ -41,6 +41,7 @@ Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 Plug 'HerringtonDarkholme/yats.vim' " TypeScript Syntax
 Plug 'othree/html5.vim'             " Html5 Syntax
 Plug 'othree/yajs.vim'              " JavaScript Syntax
+Plug 'OmniSharp/omnisharp-vim'      " C# IDE features via OmniSharp-roslyn
 " completion / LSP
 "
 " https://github.com/dense-analysis/ale/pull/5078
@@ -55,6 +56,7 @@ Plug 'yami-beta/asyncomplete-omni.vim'
 Plug 'vim-test/vim-test'  " pytest
 Plug 'lervag/wiki.vim'
 Plug 'sharat87/roast.vim' " http requests
+Plug 'puremourning/vimspector'      " debugger (C# needs :VimspectorInstall netcoredbg)
 
 call plug#end()
 
@@ -190,10 +192,10 @@ inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 imap <c-space> <Plug>(asyncomplete_force_refresh)
 
 " search
-nnoremap <silent> <leader>f :Files<CR>
-nnoremap <silent> <leader><S-f> :Rg<CR>
+nnoremap <silent> <leader>/ :Rg<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader><leader> :History<CR>
+nnoremap <silent> <leader><leader> :Files<CR>
+nnoremap <silent> <leader>l :History<CR>
 
 " copilot
 imap <silent> <C-l> <Plug>(copilot-dismiss)
@@ -206,6 +208,8 @@ vmap <leader>a <Plug>CopilotChatAddSelection
 
 " LSP
 nmap <silent> gd <Plug>(ale_go_to_definition)
+nmap <silent> gi <Plug>(ale_go_to_implementation)
+nmap <silent> <leader>s :ALESymbolSearch<space>
 nmap <silent> K <Plug>(ale_hover)
 nmap <silent> <leader>rn :ALERename<CR>
 nmap <silent> [d <Plug>(ale_previous_wrap)
@@ -248,6 +252,11 @@ if executable('rg')
   set grepprg=rg\ --vimgrep
 endif
 
+" :Rg — fuzzy-filter on content only (--nth 4.. excludes filename from matching)
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case --glob "!*.cd" -- '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
 
 " diagnostics currently need a fix in:
 " ~/vimfiles/plugged/ale/autoload/ale/lsp_linter.vim line 573:
@@ -267,6 +276,7 @@ let g:ale_linters = {
         \ 'python': ['ty', 'ruff'],
         \ 'haskell': ['hls'],
         \ 'json': ['jq'],
+        \ 'cs': ['OmniSharp'],
         \}
 let g:ale_fixers = {
         \ 'python': ['black', 'ruff'],
@@ -310,20 +320,70 @@ augroup asyncomplete_sources
     autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
         \ 'name': 'omni',
         \ 'whitelist': ['*'],
-        \ 'blacklist': ['python'],
+        \ 'blacklist': ['python', 'cs'],
         \ 'completor': function('asyncomplete#sources#omni#completor')
         \  }))
     " buffer completion
     autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
         \ 'name': 'buffer',
         \ 'whitelist': ['*'],
-        \ 'blacklist': ['python'],
+        \ 'blacklist': ['python', 'cs'],
         \ 'completor': function('asyncomplete#sources#buffer#completor'),
         \ }))
 augroup END
 
 
-" Wiki
+
+" OmniSharp / C#
+let g:OmniSharp_server_use_net6 = 1          " use net6+ build of OmniSharp-roslyn
+let g:OmniSharp_selector_ui = 'fzf'          " use fzf for code-actions / find-symbol
+let g:OmniSharp_selector_findusages = 'fzf'
+let g:OmniSharp_popup = 0                    " use preview window (like ALE), stays open until <C-l>
+
+let g:OmniSharp_server_path = 'C:\Users\NeuschmidF\bin\omnisharp-win-x64\OmniSharp.exe'
+let g:OmniSharp_server_path = $HOME.'\bin\omnisharp-win-x64\OmniSharp.exe'
+
+" Buffer-local C# bindings that mirror the global ALE LSP bindings so the
+" same muscle-memory works in C# (via OmniSharp) and every other language
+" (via ALE) without any conflict.
+augroup omnisharp_commands
+    autocmd!
+
+    " --- mirror global LSP bindings ---
+    autocmd FileType cs nmap <silent> <buffer> gd  <Plug>(omnisharp_go_to_definition)
+    autocmd FileType cs nmap <silent> <buffer> K   <Plug>(omnisharp_documentation)
+    autocmd FileType cs nmap <silent> <buffer> <leader>rn  <Plug>(omnisharp_rename)
+    autocmd FileType cs nmap <silent> <buffer> g.  <Plug>(omnisharp_code_actions)
+    autocmd FileType cs xmap <silent> <buffer> g.  <Plug>(omnisharp_code_actions)
+    autocmd FileType cs nmap <silent> <buffer> gI  <Plug>(omnisharp_fix_usings)
+    autocmd FileType cs nmap <silent> <buffer> gA  <Plug>(omnisharp_find_usages)
+    autocmd FileType cs nmap <silent> <buffer> gh  <Plug>(omnisharp_type_lookup)
+    autocmd FileType cs nmap <silent> <buffer> <leader>gq  <Plug>(omnisharp_code_format)
+
+    " --- OmniSharp extras ---
+    autocmd FileType cs nmap <silent> <buffer> gi <Plug>(omnisharp_find_implementations)
+    autocmd FileType cs nmap <silent> <buffer> <leader>s <Plug>(omnisharp_find_symbol)
+
+    " navigate by method/property (mirrors ö/ä → [[ / ]] on German layout)
+    autocmd FileType cs nmap <silent> <buffer> [[ <Plug>(omnisharp_navigate_up)
+    autocmd FileType cs nmap <silent> <buffer> ]] <Plug>(omnisharp_navigate_down)
+
+    " auto type-lookup on cursor-hold
+    autocmd CursorHold *.cs OmniSharpTypeLookup
+
+    " --- test running: override vim-test bindings with OmniSharp commands ---
+    autocmd FileType cs nmap <silent> <buffer> <leader>tn :OmniSharpRunTest<CR>
+    autocmd FileType cs nmap <silent> <buffer> <leader>tf :OmniSharpRunTestsInFile<CR>
+    autocmd FileType cs nmap <silent> <buffer> <leader>td :OmniSharpDebugTest<CR>
+augroup END
+
+
+" Vimspector
+" Run :VimspectorInstall netcoredbg  once to install the C# debug adapter.
+let g:vimspector_enable_mappings = 'HUMAN'   " F5/F9/F10/F11/F12 standard bindings
+
+
+
 if exists("$WIKI_ROOT") && !empty($WIKI_ROOT)
     let g:wiki_root = $WIKI_ROOT
 else
