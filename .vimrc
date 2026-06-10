@@ -57,6 +57,7 @@ Plug 'vim-test/vim-test'  " pytest
 Plug 'lervag/wiki.vim'
 Plug 'sharat87/roast.vim' " http requests
 Plug 'puremourning/vimspector'      " debugger (C# needs :VimspectorInstall netcoredbg)
+Plug 'airblade/vim-gitgutter'
 
 call plug#end()
 
@@ -163,9 +164,9 @@ nnoremap <leader><CR> <C-]>
 nnoremap n nzz
 nnoremap N Nzz
 
-" use <C-l> to clear the highlighting of :hlsearch
-nnoremap <silent> <C-l>
-\ :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>:pclose<CR>
+ " <C-l>: clear search highlight, update diffs, close preview and image popup
+ nnoremap <silent> <C-l>
+ \ :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>:pclose<CR>:if exists('g:image_popup')<Bar>call popup_close(g:image_popup)<Bar>unlet g:image_popup<Bar>endif<CR>
 
 " move selected lines
 vnoremap J :m '>+1<CR>gv=gv
@@ -205,6 +206,9 @@ imap <silent> <M-l> <Plug>(copilot-accept-line)
 " copilot chat
 nnoremap <leader>c :CopilotChatOpen<CR>
 vmap <leader>a <Plug>CopilotChatAddSelection
+
+" exit terminal mode
+:tnoremap <Esc> <C-\><C-n>
 
 " LSP
 nmap <silent> gd <Plug>(ale_go_to_definition)
@@ -271,23 +275,42 @@ call ale#linter#Define('python', {
 \   'project_root': function('ale#python#FindProjectRoot'),
 \})
 
+" Tell ALE that 'htmlangular' should load linters/fixers defined for 'html'
+let g:ale_linter_aliases = {'htmlangular': 'html'}
+
 " ALE
 let g:ale_linters = {
         \ 'python': ['ty', 'ruff'],
         \ 'haskell': ['hls'],
         \ 'json': ['jq'],
         \ 'cs': ['OmniSharp'],
+        \ 'htmlangular' : ['angular'],
+        \ 'html' : ['angular'],
+        \ 'typescript': ['tsserver', 'eslint'],
         \}
 let g:ale_fixers = {
         \ 'python': ['black', 'ruff'],
         \ 'haskell': ['fourmolu'],
         \ 'json': ['jq'],
+        \ 'typescript': ['prettier'],
+        \ 'htmlangular': ['prettier'],
+        \ 'html' : ['prettier'],
+        \ 'css': ['prettier'],
+        \ 'scss': ['prettier'],
         \}
 let g:ale_fix_on_save=1
-let ale_fix_on_save_ignore = ['jq']
+let ale_fix_on_save_ignore = ['jq', 'prettier']
 let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '❗'
+
+" Windows: ALE finds bash scripts in node_modules/.bin which can't execute.
+" Use 'global' mode so ALE resolves via PATH (where .cmd wrappers live).
+let g:ale_typescript_tsserver_use_global = 1
+let g:ale_javascript_prettier_use_global = 1
+
+" Prettier: tell it to use 'html' parser for Angular templates
+autocmd FileType htmlangular let b:ale_javascript_prettier_options = '--parser html'
 
 let g:ale_python_auto_uv = 1
 let g:ale_references_use_fzf = 0  " file preview helps, but it is not kept open
@@ -396,14 +419,32 @@ endif
 
 let python_highlight_all = 1
 
+" Angular: detect component HTML templates as 'htmlangular' for ALE
+augroup angular_filetype
+    autocmd!
+    autocmd BufRead,BufNewFile *.component.html setlocal filetype=htmlangular
+augroup END
+
+" Windows: prepend project node_modules/.bin to PATH so .cmd wrappers are
+" found when ALE uses 'global' executable lookup.
+if has('win32')
+    augroup node_path
+        autocmd!
+        autocmd DirChanged,VimEnter *
+            \ if isdirectory(getcwd() . '\node_modules\.bin')
+            \ | let $PATH = getcwd() . '\node_modules\.bin;' . $PATH
+            \ | endif
+    augroup END
+endif
+
 augroup languages
     autocmd!
     autocmd FileType make setlocal noexpandtab
-    autocmd Filetype html setlocal sts=2 sw=2 expandtab
+    autocmd Filetype html,htmlangular setlocal sts=2 sw=2 expandtab
     autocmd FileType python setlocal colorcolumn=99
     autocmd FileType json setlocal sts=2 sw=2 expandtab foldmethod=syntax
     autocmd FileType typescript setlocal sts=2 sw=2
-    autocmd FileType css setlocal sts=2 sw=2
+    autocmd FileType css,scss setlocal sts=2 sw=2
 augroup END
 
 " STATUSLINE
@@ -468,3 +509,121 @@ augroup status
   autocmd WinEnter * setlocal statusline=%!ActiveStatus()
   autocmd WinLeave * setlocal statusline=%!InactiveStatus()
 augroup END
+
+function! ShowRGBAImage(path, mode) abort
+    if !filereadable(a:path)
+        echohl ErrorMsg | echom 'File not found: ' . a:path | echohl None
+        return
+    endif
+
+    let l:cell_w = get(g:, 'popup_image_cell_width',  8)
+    let l:cell_h = get(g:, 'popup_image_cell_height', 16)
+
+    if a:mode ==# 'big'
+        let l:win_w = &columns
+        let l:win_h = &lines
+        let l:wr    = 1
+        let l:wc    = 1
+    else
+        let [l:wr, l:wc] = win_screenpos(win_getid())
+        let l:win_w = winwidth(0)
+        let l:win_h = winheight(0) * 2 / 3
+    endif
+
+    let l:max_px_w = l:win_w * l:cell_w
+    let l:max_px_h = l:win_h * l:cell_h
+
+    let l:resized = tempname() .. '.png'
+    let l:rgba    = tempname() .. '.rgba'
+
+    call system('magick ' .. shellescape(a:path)
+                \ .. ' -resize ' .. shellescape(l:max_px_w .. 'x' .. l:max_px_h .. '>')
+                \ .. ' ' .. shellescape(l:resized))
+
+    let l:dim = split(system('magick identify -format "%w %h" ' .. shellescape(l:resized)))
+    if len(l:dim) != 2
+        echohl ErrorMsg | echom 'Failed to get image size' | echohl None
+        call delete(l:resized)
+        return
+    endif
+    let l:w = str2nr(l:dim[0])
+    let l:h = str2nr(l:dim[1])
+
+    call system('magick ' .. shellescape(l:resized) .. ' -alpha on -depth 8 RGBA:' .. shellescape(l:rgba))
+    call delete(l:resized)
+
+    if !filereadable(l:rgba)
+        echohl ErrorMsg | echom 'Conversion failed' | echohl None
+        return
+    endif
+
+    let l:blob = readblob(l:rgba)
+    call delete(l:rgba)
+
+    if exists('g:image_popup')
+        call popup_close(g:image_popup)
+        unlet g:image_popup
+    endif
+
+    let g:image_popup = popup_create('', #{
+                \ image:   #{ data: l:blob, width: l:w, height: l:h },
+                \ line:    l:wr,
+                \ col:     l:wc + l:win_w - 1,
+                \ pos:     'topright',
+                \ fixed:   v:true,
+                \ border:  [0, 0, 0, 0],
+                \ padding: [0, 0, 0, 0],
+                \ })
+endfunction
+
+function! GetFileUnderCursor() abort
+    if &filetype ==# 'netrw'
+        let l:name = substitute(getline('.'), '^\s*', '', '')
+        return b:netrw_curdir . '/' . l:name
+    endif
+
+    let l:line      = getline('.')
+    let l:col       = col('.') - 1
+    let l:candidate = ''
+
+    for [l:o, l:c] in [['"', '"'], ["'", "'"], ['`', '`']]
+        let l:pat = l:o . '\([^' . l:c . ']\+\)' . l:c
+        let l:idx = 0
+        while 1
+            let l:ms = match(l:line, l:pat, l:idx)
+            if l:ms < 0 | break | endif
+            let l:me = matchend(l:line, l:pat, l:idx)
+            if l:ms < l:col && l:col < l:me - 1
+                let l:candidate = matchstr(l:line, l:pat)[1:-2]
+                break
+            endif
+            let l:idx = l:me
+        endwhile
+        if !empty(l:candidate) | break | endif
+    endfor
+
+    if empty(l:candidate)
+        let l:candidate = expand('<cfile>')
+    endif
+
+    " 1. Try as-is (absolute path or relative to :pwd)
+    if filereadable(l:candidate)
+        return l:candidate
+    endif
+
+    " 2. Try relative to the current file's directory
+    let l:rel = expand('%:p:h') . '/' . l:candidate
+    if filereadable(l:rel)
+        return l:rel
+    endif
+
+    " Return original and let the caller report the error
+    return l:candidate
+endfunction
+
+nnoremap <silent> <leader>i :call ShowRGBAImage(fnamemodify(GetFileUnderCursor(), ':p'), 'small')<CR>
+nnoremap <silent> <leader>I :call ShowRGBAImage(fnamemodify(GetFileUnderCursor(), ':p'), 'big')<CR>
+
+
+"C:\Users\NeuschmidF\Pictures\Screenshots\Screenshot_2026-02-03_161158.png
+"C:\Users\NeuschmidF\Pictures\Screenshots\Screenshot 2026-02-24 155238.png"
