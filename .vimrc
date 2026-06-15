@@ -54,7 +54,7 @@ Plug 'yami-beta/asyncomplete-omni.vim'
 
 " Features
 Plug 'vim-test/vim-test'  " pytest
-Plug 'lervag/wiki.vim'
+" Plug 'lervag/wiki.vim'
 Plug 'sharat87/roast.vim' " http requests
 Plug 'puremourning/vimspector'      " debugger (C# needs :VimspectorInstall netcoredbg)
 Plug 'airblade/vim-gitgutter'
@@ -193,10 +193,22 @@ inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 imap <c-space> <Plug>(asyncomplete_force_refresh)
 
 " search
-nnoremap <silent> <leader>/ :Rg<CR>
+" nnoremap <silent> <leader>/ :Rg<CR>
+" nnoremap <silent> <leader><leader> :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader><leader> :Files<CR>
 nnoremap <silent> <leader>l :History<CR>
+
+command! ProjectFiles execute 'Files ' . FindProjectRoot()
+command! ProjectRg execute 'Rg ' . shellescape('') . ' ' . FindProjectRoot()
+
+nnoremap <silent> <leader><leader> :ProjectFiles<CR>
+nnoremap <silent> <leader>/ :ProjectRg<CR>
+nnoremap <leader>pr :echo FindProjectRoot()<CR>
+nnoremap <silent> <leader>ww :edit $WIKI_ROOT<CR>
+nnoremap <silent> <leader>w<leader>w :execute 'edit ' . $WIKI_ROOT . '/daily/' . strftime('%Y-%m-%d') . '.md'<CR>
+
+nnoremap <silent> _ :edit .<CR>
+
 
 " copilot
 imap <silent> <C-l> <Plug>(copilot-dismiss)
@@ -405,15 +417,6 @@ augroup END
 " Run :VimspectorInstall netcoredbg  once to install the C# debug adapter.
 let g:vimspector_enable_mappings = 'HUMAN'   " F5/F9/F10/F11/F12 standard bindings
 
-
-
-if exists("$WIKI_ROOT") && !empty($WIKI_ROOT)
-    let g:wiki_root = $WIKI_ROOT
-else
-    echohl WarningMsg
-    echom "Warning: Environment variable WIKI_ROOT is not set."
-    echohl None
-endif
 
 " LANGUAGE SPECIFIC SETTINGS
 
@@ -627,3 +630,104 @@ nnoremap <silent> <leader>I :call ShowRGBAImage(fnamemodify(GetFileUnderCursor()
 
 "C:\Users\NeuschmidF\Pictures\Screenshots\Screenshot_2026-02-03_161158.png
 "C:\Users\NeuschmidF\Pictures\Screenshots\Screenshot 2026-02-24 155238.png"
+
+
+" insert date
+inoremap <C-g>d <C-g>u<C-R>=strftime("%Y-%m-%d")<CR>
+
+" find project root
+function! FindProjectRoot()
+    let l:is_win = has('win32') || has('win64')
+   " --- Get directory of current buffer ---
+   if &filetype ==# 'netrw' && exists('b:netrw_curdir')
+     let l:dir = b:netrw_curdir
+   elseif isdirectory(expand('%:p'))
+     let l:dir = expand('%:p')
+   else
+     let l:dir = expand('%:p:h')
+   endif
+
+    let l:dir_parts = filter(split(fnamemodify(l:dir, ':p'), '[/\\]'), '!empty(v:val)')
+    if l:is_win
+        call map(l:dir_parts, 'tolower(v:val)')
+    endif
+
+    " --- WIKI_ROOT ---
+    if exists('$WIKI_ROOT') && !empty($WIKI_ROOT)
+        let l:wiki_raw   = fnamemodify($WIKI_ROOT, ':p')
+        let l:wiki_parts = filter(split(l:wiki_raw, '[/\\]'), '!empty(v:val)')
+        if l:is_win
+            call map(l:wiki_parts, 'tolower(v:val)')
+        endif
+
+        let l:n = len(l:wiki_parts)
+
+        if l:n > 0 && len(l:dir_parts) >= l:n
+                    \ && l:dir_parts[:l:n - 1] ==# l:wiki_parts
+            return substitute(substitute(l:wiki_raw, '[/\\]\+$', '', ''), '\\', '/', 'g')
+        endif
+    endif
+
+    " --- Git root ---
+    let l:gitcmd = 'git -C ' . shellescape(l:dir) . ' rev-parse --show-toplevel'
+    let l:git = systemlist(l:gitcmd)
+    if v:shell_error == 0 && !empty(l:git)
+        return substitute(l:git[0], '\\', '/', 'g')
+    endif
+
+    " --- Fallback: file's dir if outside cwd, otherwise cwd ---
+    let l:cwd = fnamemodify(getcwd(), ':p')
+    let l:cwd_parts = filter(split(l:cwd, '[/\\]'), '!empty(v:val)')
+    if l:is_win | call map(l:cwd_parts, 'tolower(v:val)') | endif
+
+    if len(l:dir_parts) >= len(l:cwd_parts)
+                \ && l:dir_parts[:len(l:cwd_parts)-1] ==# l:cwd_parts
+        " file is inside cwd — return cwd as usual
+        return substitute(substitute(l:cwd, '[/\\]\+$', '', ''), '\\', '/', 'g')
+    else
+        " file is outside cwd — return the file's own directory
+        return substitute(substitute(fnamemodify(l:dir, ':p'), '[/\\]\+$', '', ''), '\\', '/', 'g')
+    endif
+endfunction
+
+function! s:PasteImageFromClipboard() abort
+    let l:buf_dir = expand('%:p:h')
+    if empty(l:buf_dir) | let l:buf_dir = getcwd() | endif
+
+    let l:img_dir  = l:buf_dir . '\assets'
+    let l:img_name = 'screenshot_' . strftime('%Y%m%d_%H%M%S') . '.png'
+    let l:img_path = l:img_dir . '\' . l:img_name
+
+    " Write a PS1 script to avoid shell-escaping nightmares
+    let l:ps = tempname() . '.ps1'
+    call writefile([
+                \ 'Add-Type -AssemblyName System.Windows.Forms',
+                \ 'if (-not [System.Windows.Forms.Clipboard]::ContainsImage()) { exit 1 }',
+                \ 'New-Item -ItemType Directory -Force -Path "' . l:img_dir . '" | Out-Null',
+                \ '[System.Windows.Forms.Clipboard]::GetImage().Save("' . l:img_path . '")',
+                \ ], l:ps)
+    call system('powershell -NoProfile -ExecutionPolicy Bypass -File ' . shellescape(l:ps))
+    call delete(l:ps)
+
+    if v:shell_error != 0
+        echom 'No image in clipboard'
+        return ''
+    endif
+
+    return '![](assets/' . l:img_name . ')'
+endfunction
+
+function! s:PasteImageNormal() abort
+    let l:md = s:PasteImageFromClipboard()
+    if empty(l:md) | return | endif
+    call append(line('.'), l:md)
+    normal! j
+endfunction
+
+augroup markdown_paste_image
+    autocmd!
+    autocmd FileType markdown nnoremap <buffer> <silent> <leader>p  :call <SID>PasteImageNormal()<CR>
+    autocmd FileType markdown inoremap <buffer> <silent> <C-g>p     <C-R>=<SID>PasteImageFromClipboard()<CR>
+augroup END
+
+
