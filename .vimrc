@@ -199,15 +199,25 @@ nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>l :History<CR>
 
 command! ProjectFiles execute 'Files ' . FindProjectRoot()
-command! ProjectRg execute 'Rg ' . shellescape('') . ' ' . FindProjectRoot()
+command! ProjectRg call fzf#vim#grep(
+  \ 'rg --column --line-number --no-heading --color=always --smart-case --glob "!*.cd" -- ""', 1,
+  \ fzf#vim#with_preview({'options': '--delimiter : --nth 4..', 'dir': FindProjectRoot()}), 0)
+
+command! WikiRg call fzf#vim#grep(
+  \ 'rg --column --line-number --no-heading --color=always --smart-case --glob "!*.cd" -- ""', 1,
+  \ fzf#vim#with_preview({'options': '--delimiter : --nth 4..', 'dir': fnamemodify($WIKI_ROOT, ':p')}), 0)
 
 nnoremap <silent> <leader><leader> :ProjectFiles<CR>
 nnoremap <silent> <leader>/ :ProjectRg<CR>
+nnoremap <silent> <leader>w<leader> :execute 'Files ' . fnamemodify($WIKI_ROOT, ':p')<CR>
+nnoremap <silent> <leader>w/ :WikiRg<CR>
+
 nnoremap <leader>pr :echo FindProjectRoot()<CR>
 nnoremap <silent> <leader>ww :edit $WIKI_ROOT<CR>
 nnoremap <silent> <leader>w<leader>w :execute 'edit ' . $WIKI_ROOT . '/daily/' . strftime('%Y-%m-%d') . '.md'<CR>
 
 nnoremap <silent> _ :edit .<CR>
+nnoremap <leader>wn :e ~/OneDrive - Nordex SE/Wiki/
 
 
 " copilot
@@ -730,4 +740,4 @@ augroup markdown_paste_image
     autocmd FileType markdown inoremap <buffer> <silent> <C-g>p     <C-R>=<SID>PasteImageFromClipboard()<CR>
 augroup END
 
-
+let g:netrw_hide=0
