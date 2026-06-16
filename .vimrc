@@ -185,6 +185,18 @@ nnoremap <Leader>ga :Gwrite<CR>
 nnoremap <Leader>gg :Git<CR>
 nnoremap <Leader>gb :Git blame<CR>
 nnoremap <Leader>gd :Gvdiff<CR>
+nnoremap <silent> <Leader>gc :GCheckout<CR>
+
+function! s:GBranchesHandler(branch) abort
+    let l:branch = substitute(a:branch, '^\*\?\s\+\(remotes/[^/]\+/\)\?', '', '')
+    execute 'Git checkout ' . l:branch
+endfunction
+
+command! GCheckout call fzf#run(fzf#wrap({
+    \ 'source':  'git branch --all --sort=-committerdate',
+    \ 'sink':    function('s:GBranchesHandler'),
+    \ 'options': '--prompt="branch> " --ansi --preview "git log --oneline --color=always {1} -- 2>/dev/null | head -20"',
+    \ }))
 
 " completion:
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
