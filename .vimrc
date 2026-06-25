@@ -242,7 +242,10 @@ nnoremap <leader>c :CopilotChatOpen<CR>
 vmap <leader>a <Plug>CopilotChatAddSelection
 
 " exit terminal mode
-:tnoremap <Esc> <C-\><C-n>
+tnoremap <Esc><Esc> <C-\><C-n>
+
+" open vinegar at current dir
+nnoremap _ :Explore<CR>
 
 " LSP
 nmap <silent> gd <Plug>(ale_go_to_definition)
@@ -470,6 +473,7 @@ augroup languages
     autocmd FileType json setlocal sts=2 sw=2 expandtab foldmethod=syntax
     autocmd FileType typescript setlocal sts=2 sw=2
     autocmd FileType css,scss setlocal sts=2 sw=2
+    autocmd FileType cs setlocal sts=4 sw=4 makeprg=dotnet\ build
 augroup END
 
 " STATUSLINE
