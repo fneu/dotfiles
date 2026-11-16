@@ -251,6 +251,37 @@ vmap <leader>a <Plug>CopilotChatAddSelection
 " exit terminal mode
 tnoremap <Esc><Esc> <C-\><C-n>
 
+" persistent side terminal on the right (e.g. for copilot cli)
+function! s:ToggleSideTerm() abort
+    let l:buf = get(s:, 'side_term_buf', -1)
+    if bufexists(l:buf) && term_getstatus(l:buf) =~# 'finished'
+        execute 'bwipeout! ' . l:buf
+    endif
+    let l:width = &columns / 3
+    if !bufexists(l:buf)
+        execute 'botright vertical terminal ++kill=term ++cols=' . l:width
+        let s:side_term_buf = bufnr('%')
+        setlocal nobuflisted nolist nonumber norelativenumber winfixwidth
+        return
+    endif
+    let l:win = bufwinnr(l:buf)
+    if l:win > 0
+        if winnr('$') == 1
+            enew
+        else
+            let l:cur = win_getid()
+            execute l:win . 'wincmd w'
+            hide
+            call win_gotoid(l:cur)
+        endif
+    else
+        execute 'botright vertical ' . l:width . 'split'
+        execute 'buffer ' . l:buf
+        setlocal winfixwidth
+    endif
+endfunction
+nnoremap <silent> <leader>aa :call <SID>ToggleSideTerm()<CR>
+
 " open vinegar at current dir
 nnoremap _ :Explore<CR>
 
