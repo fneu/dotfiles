@@ -40,7 +40,6 @@ Plug 'tpope/vim-abolish'            " Case aware replace; crs, crm, etc. for cas
 Plug 'wincent/terminus'             " FocusGained, cursor shape, bracketed paste
 Plug 'ap/vim-css-color'             " highlight colors in various file types
 Plug 'github/copilot.vim'           " AI autocompletion
-Plug 'DanBradbury/copilot-chat.vim' " AI chat interface
 
 " languages
 Plug 'Vimjas/vim-python-pep8-indent' " PEP8 conform indenting
@@ -243,10 +242,6 @@ nnoremap <leader>wn :e ~/OneDrive - Nordex SE/Wiki/
 imap <silent> <C-l> <Plug>(copilot-dismiss)
 imap <silent> <M-w> <Plug>(copilot-accept-word)
 imap <silent> <M-l> <Plug>(copilot-accept-line)
-
-" copilot chat
-nnoremap <leader>c :CopilotChatOpen<CR>
-vmap <leader>a <Plug>CopilotChatAddSelection
 
 " exit terminal mode
 tnoremap <Esc><Esc> <C-\><C-n>
