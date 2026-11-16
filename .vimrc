@@ -191,7 +191,157 @@ nnoremap <Leader>ga :Gwrite<CR>
 nnoremap <Leader>gg :Git<CR>
 nnoremap <Leader>gb :Git blame<CR>
 nnoremap <Leader>gd :Gvdiff<CR>
+nnoremap <Leader>gr :Git read<CR>
+nnoremap <silent> <Leader>gD :GReview<CR>
+nnoremap <Leader>ge :Git edit<Space>
+nnoremap <Leader>gl :Gclog<CR>
 nnoremap <silent> <Leader>gc :GCheckout<CR>
+
+" Review all changes vs HEAD (staged + unstaged + untracked), one quickfix
+" entry per file labelled with its status. Selecting an entry (<CR> in the
+" quickfix window, ]q/[q) opens it as a side-by-side diff against HEAD.
+" Based on https://github.com/tpope/vim-fugitive/issues/132
+let s:review_title = 'GReview'
+
+function! s:GitStatusLabels(root) abort
+    let l:out = system('git -C ' . shellescape(a:root)
+                \ . ' -c core.quotepath=off status --porcelain=v1 -z')
+    let l:labels = {}
+    if v:shell_error
+        return l:labels
+    endif
+    let l:entries = split(l:out, '\%x01')
+    let l:i = 0
+    while l:i < len(l:entries)
+        let l:e = l:entries[l:i]
+        let [l:x, l:y, l:path] = [l:e[0], l:e[1], l:e[3:]]
+        if l:x =~# '[RC]'
+            let l:i += 1    " skip the original path of renames/copies
+        endif
+        let l:parts = []
+        if l:x ==# '?'
+            call add(l:parts, 'untracked')
+        else
+            if l:x ==# 'A'
+                call add(l:parts, 'added')
+            elseif l:x !=# ' '
+                call add(l:parts, 'staged')
+            endif
+            if l:y !=# ' '
+                call add(l:parts, 'unstaged')
+            endif
+        endif
+        let l:labels[s:NormPath(a:root . '/' . l:path)] = '[' . join(l:parts, '+') . ']'
+        let l:i += 1
+    endwhile
+    return l:labels
+endfunction
+
+function! s:NormPath(path) abort
+    let l:p = substitute(fnamemodify(a:path, ':p'), '\\', '/', 'g')
+    return has('win32') ? tolower(l:p) : l:p
+endfunction
+
+function! s:GReview() abort
+    let l:root = FugitiveWorkTree()
+    if empty(l:root)
+        echohl ErrorMsg | echom 'Not in a git repository' | echohl None
+        return
+    endif
+    silent Git! difftool --name-status HEAD
+    let l:untracked = systemlist('git -C ' . shellescape(l:root)
+                \ . ' -c core.quotepath=off ls-files --others --exclude-standard')
+    if !v:shell_error && !empty(l:untracked)
+        call setqflist(map(l:untracked,
+                    \ {_, f -> {'filename': l:root . '/' . f, 'text': ''}}), 'a')
+    endif
+
+    let l:labels = s:GitStatusLabels(l:root)
+    let l:items = getqflist()
+    for l:item in l:items
+        if l:item.bufnr > 0
+            let l:label = get(l:labels, s:NormPath(bufname(l:item.bufnr)), '')
+            let l:item.text = l:label . (empty(l:item.text) ? '' : ' ' . l:item.text)
+        endif
+    endfor
+    call setqflist([], 'r', {'items': l:items, 'title': s:review_title})
+
+    let l:first = index(map(copy(l:items), 'v:val.valid'), 1) + 1
+    if l:first < 1
+        cclose
+        echo 'No changes'
+        return
+    endif
+    call setqflist([], 'a', {'idx': l:first})
+    call s:ReviewDiff()
+endfunction
+command! GReview call s:GReview()
+
+function! s:IsReview() abort
+    return getqflist({'title': 0}).title ==# s:review_title
+endfunction
+
+" close the previous entry's diff windows, jump to the current entry and
+" diff it against the target fugitive stored in the quickfix context
+function! s:ReviewDiff() abort
+    for l:w in reverse(range(1, winnr('$')))
+        if winnr('$') > 1 && getwinvar(l:w, '&diff')
+                    \ && bufname(winbufnr(l:w)) =~# '^fugitive:'
+            execute l:w . 'close'
+        endif
+    endfor
+    diffoff!
+    cc
+    let l:qf = getqflist({'context': 0, 'idx': 0})
+    let l:ctx = get(l:qf, 'context', {})
+    if type(l:ctx) != v:t_dict
+        return
+    endif
+    let l:diff = get(get(get(l:ctx, 'items', []), l:qf.idx - 1, {}), 'diff', [])
+    for l:i in reverse(range(len(l:diff)))
+        execute (l:i ? 'rightbelow' : 'leftabove') 'vert diffsplit'
+                    \ fnameescape(l:diff[l:i].filename)
+        wincmd p
+    endfor
+endfunction
+
+" ]q / [q: diff-aware in the review list, unimpaired behaviour otherwise
+function! s:QfStep(dir) abort
+    if s:IsReview()
+        let l:qf = getqflist({'idx': 0, 'size': 0})
+        let l:step = a:dir ==# 'next' ? v:count1 : -v:count1
+        let l:idx = l:qf.idx + l:step
+        if l:idx < 1 || l:idx > l:qf.size
+            echohl ErrorMsg | echom 'E553: No more items' | echohl None
+            return
+        endif
+        call setqflist([], 'a', {'idx': l:idx})
+        call s:ReviewDiff()
+        return
+    endif
+    try
+        execute (v:count ? v:count : '') . 'c' . a:dir
+        normal! zv
+    catch
+        echohl ErrorMsg | echom substitute(v:exception, '^Vim(\a\+):', '', '') | echohl None
+    endtry
+endfunction
+nnoremap <silent> ]q :<C-U>call <SID>QfStep('next')<CR>
+nnoremap <silent> [q :<C-U>call <SID>QfStep('previous')<CR>
+
+" <CR> in the quickfix window opens the diff for review lists
+function! s:QfEnter() abort
+    if !s:IsReview() || getwininfo(win_getid())[0].loclist
+        execute "normal! \<CR>"
+        return
+    endif
+    call setqflist([], 'a', {'idx': line('.')})
+    call s:ReviewDiff()
+endfunction
+augroup review_qf
+    autocmd!
+    autocmd FileType qf nnoremap <buffer> <silent> <CR> :call <SID>QfEnter()<CR>
+augroup END
 
 function! s:GBranchesHandler(branch) abort
     let l:branch = substitute(a:branch, '^\*\?\s\+\(remotes/[^/]\+/\)\?', '', '')
@@ -269,6 +419,7 @@ function! s:ToggleSideTerm() abort
             hide
             call win_gotoid(l:cur)
         endif
+        silent! checktime
     else
         execute 'botright vertical ' . l:width . 'split'
         execute 'buffer ' . l:buf
@@ -276,6 +427,12 @@ function! s:ToggleSideTerm() abort
     endif
 endfunction
 nnoremap <silent> <leader>aa :call <SID>ToggleSideTerm()<CR>
+
+" reload files changed by tools in the terminal when leaving it
+augroup terminal_checktime
+    autocmd!
+    autocmd WinEnter * if &buftype !=# 'terminal' | silent! checktime | endif
+augroup END
 
 " open vinegar at current dir
 nnoremap _ :Explore<CR>
