@@ -454,7 +454,7 @@ augroup terminal_checktime
 augroup END
 
 " open vinegar at current dir
-nnoremap _ :Explore<CR>
+nnoremap _ :Explore .<CR>
 
 " LSP
 nmap <silent> gd <Plug>(ale_go_to_definition)
