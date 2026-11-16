@@ -18,6 +18,13 @@ call plug#begin()
 
 " colorscheme
 Plug 'fneu/breezy'
+Plug 'bluz71/vim-nightfly-colors'
+Plug 'bluz71/vim-moonfly-colors'
+Plug 'bignimbus/pop-punk.vim'
+Plug 'sainnhe/everforest'
+Plug 'sainnhe/sonokai'
+Plug 'mhartington/oceanic-next'
+Plug 'phanviet/vim-monokai-pro'
 
 " tools / editing
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -41,10 +48,10 @@ Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 Plug 'HerringtonDarkholme/yats.vim' " TypeScript Syntax
 Plug 'othree/html5.vim'             " Html5 Syntax
 Plug 'othree/yajs.vim'              " JavaScript Syntax
-Plug 'OmniSharp/omnisharp-vim'      " C# IDE features via OmniSharp-roslyn
+if has('win32')
+    Plug 'OmniSharp/omnisharp-vim'  " C# IDE features via OmniSharp-roslyn
+endif
 " completion / LSP
-"
-" https://github.com/dense-analysis/ale/pull/5078
 Plug 'dense-analysis/ale'
 
 Plug 'prabirshrestha/asyncomplete.vim'
@@ -299,19 +306,6 @@ command! -bang -nargs=* Rg
   \   'rg --column --line-number --no-heading --color=always --smart-case --glob "!*.cd" -- '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
 
-" diagnostics currently need a fix in:
-" ~/vimfiles/plugged/ale/autoload/ale/lsp_linter.vim line 573:
-" if ale#lsp#HasCapability(l:id, 'pull_model') || a:linter.name is# 'ty'
-" see https://github.com/dense-analysis/ale/issues/4971
-
-call ale#linter#Define('python', {
-\   'name': 'ty',
-\   'lsp': 'stdio',
-\   'executable': 'ty',
-\   'command': 'ty server',
-\   'project_root': function('ale#python#FindProjectRoot'),
-\})
-
 " Tell ALE that 'htmlangular' should load linters/fixers defined for 'html'
 let g:ale_linter_aliases = {'htmlangular': 'html'}
 
@@ -320,11 +314,13 @@ let g:ale_linters = {
         \ 'python': ['ty', 'ruff'],
         \ 'haskell': ['hls'],
         \ 'json': ['jq'],
-        \ 'cs': ['OmniSharp'],
         \ 'htmlangular' : ['angular'],
         \ 'html' : ['angular'],
         \ 'typescript': ['tsserver', 'eslint'],
         \}
+if has('win32')
+    let g:ale_linters.cs = ['OmniSharp']
+endif
 let g:ale_fixers = {
         \ 'python': ['black', 'ruff'],
         \ 'haskell': ['fourmolu'],
@@ -343,8 +339,10 @@ let g:ale_sign_warning = '❗'
 
 " Windows: ALE finds bash scripts in node_modules/.bin which can't execute.
 " Use 'global' mode so ALE resolves via PATH (where .cmd wrappers live).
-let g:ale_typescript_tsserver_use_global = 1
-let g:ale_javascript_prettier_use_global = 1
+if has('win32')
+    let g:ale_typescript_tsserver_use_global = 1
+    let g:ale_javascript_prettier_use_global = 1
+endif
 
 " Prettier: tell it to use 'html' parser for Angular templates
 autocmd FileType htmlangular let b:ale_javascript_prettier_options = '--parser html'
@@ -394,48 +392,49 @@ augroup END
 
 
 
-" OmniSharp / C#
-let g:OmniSharp_server_use_net6 = 1          " use net6+ build of OmniSharp-roslyn
-let g:OmniSharp_selector_ui = 'fzf'          " use fzf for code-actions / find-symbol
-let g:OmniSharp_selector_findusages = 'fzf'
-let g:OmniSharp_popup = 0                    " use preview window (like ALE), stays open until <C-l>
+" OmniSharp / C# (Windows only)
+if has('win32')
+    let g:OmniSharp_server_use_net6 = 1          " use net6+ build of OmniSharp-roslyn
+    let g:OmniSharp_selector_ui = 'fzf'          " use fzf for code-actions / find-symbol
+    let g:OmniSharp_selector_findusages = 'fzf'
+    let g:OmniSharp_popup = 0                    " use preview window (like ALE), stays open until <C-l>
 
-let g:OmniSharp_server_path = 'C:\Users\NeuschmidF\bin\omnisharp-win-x64\OmniSharp.exe'
-let g:OmniSharp_server_path = $HOME.'\bin\omnisharp-win-x64\OmniSharp.exe'
+    let g:OmniSharp_server_path = $HOME.'\bin\omnisharp-win-x64\OmniSharp.exe'
 
-" Buffer-local C# bindings that mirror the global ALE LSP bindings so the
-" same muscle-memory works in C# (via OmniSharp) and every other language
-" (via ALE) without any conflict.
-augroup omnisharp_commands
-    autocmd!
+    " Buffer-local C# bindings that mirror the global ALE LSP bindings so the
+    " same muscle-memory works in C# (via OmniSharp) and every other language
+    " (via ALE) without any conflict.
+    augroup omnisharp_commands
+        autocmd!
 
-    " --- mirror global LSP bindings ---
-    autocmd FileType cs nmap <silent> <buffer> gd  <Plug>(omnisharp_go_to_definition)
-    autocmd FileType cs nmap <silent> <buffer> K   <Plug>(omnisharp_documentation)
-    autocmd FileType cs nmap <silent> <buffer> <leader>rn  <Plug>(omnisharp_rename)
-    autocmd FileType cs nmap <silent> <buffer> g.  <Plug>(omnisharp_code_actions)
-    autocmd FileType cs xmap <silent> <buffer> g.  <Plug>(omnisharp_code_actions)
-    autocmd FileType cs nmap <silent> <buffer> gI  <Plug>(omnisharp_fix_usings)
-    autocmd FileType cs nmap <silent> <buffer> gA  <Plug>(omnisharp_find_usages)
-    autocmd FileType cs nmap <silent> <buffer> gh  <Plug>(omnisharp_type_lookup)
-    autocmd FileType cs nmap <silent> <buffer> <leader>gq  <Plug>(omnisharp_code_format)
+        " --- mirror global LSP bindings ---
+        autocmd FileType cs nmap <silent> <buffer> gd  <Plug>(omnisharp_go_to_definition)
+        autocmd FileType cs nmap <silent> <buffer> K   <Plug>(omnisharp_documentation)
+        autocmd FileType cs nmap <silent> <buffer> <leader>rn  <Plug>(omnisharp_rename)
+        autocmd FileType cs nmap <silent> <buffer> g.  <Plug>(omnisharp_code_actions)
+        autocmd FileType cs xmap <silent> <buffer> g.  <Plug>(omnisharp_code_actions)
+        autocmd FileType cs nmap <silent> <buffer> gI  <Plug>(omnisharp_fix_usings)
+        autocmd FileType cs nmap <silent> <buffer> gA  <Plug>(omnisharp_find_usages)
+        autocmd FileType cs nmap <silent> <buffer> gh  <Plug>(omnisharp_type_lookup)
+        autocmd FileType cs nmap <silent> <buffer> <leader>gq  <Plug>(omnisharp_code_format)
 
-    " --- OmniSharp extras ---
-    autocmd FileType cs nmap <silent> <buffer> gi <Plug>(omnisharp_find_implementations)
-    autocmd FileType cs nmap <silent> <buffer> <leader>s <Plug>(omnisharp_find_symbol)
+        " --- OmniSharp extras ---
+        autocmd FileType cs nmap <silent> <buffer> gi <Plug>(omnisharp_find_implementations)
+        autocmd FileType cs nmap <silent> <buffer> <leader>s <Plug>(omnisharp_find_symbol)
 
-    " navigate by method/property (mirrors ö/ä → [[ / ]] on German layout)
-    autocmd FileType cs nmap <silent> <buffer> [[ <Plug>(omnisharp_navigate_up)
-    autocmd FileType cs nmap <silent> <buffer> ]] <Plug>(omnisharp_navigate_down)
+        " navigate by method/property (mirrors ö/ä → [[ / ]] on German layout)
+        autocmd FileType cs nmap <silent> <buffer> [[ <Plug>(omnisharp_navigate_up)
+        autocmd FileType cs nmap <silent> <buffer> ]] <Plug>(omnisharp_navigate_down)
 
-    " auto type-lookup on cursor-hold
-    autocmd CursorHold *.cs OmniSharpTypeLookup
+        " auto type-lookup on cursor-hold
+        autocmd CursorHold *.cs OmniSharpTypeLookup
 
-    " --- test running: override vim-test bindings with OmniSharp commands ---
-    autocmd FileType cs nmap <silent> <buffer> <leader>tn :OmniSharpRunTest<CR>
-    autocmd FileType cs nmap <silent> <buffer> <leader>tf :OmniSharpRunTestsInFile<CR>
-    autocmd FileType cs nmap <silent> <buffer> <leader>td :OmniSharpDebugTest<CR>
-augroup END
+        " --- test running: override vim-test bindings with OmniSharp commands ---
+        autocmd FileType cs nmap <silent> <buffer> <leader>tn :OmniSharpRunTest<CR>
+        autocmd FileType cs nmap <silent> <buffer> <leader>tf :OmniSharpRunTestsInFile<CR>
+        autocmd FileType cs nmap <silent> <buffer> <leader>td :OmniSharpDebugTest<CR>
+    augroup END
+endif
 
 
 " Vimspector
@@ -539,119 +538,122 @@ augroup status
   autocmd WinLeave * setlocal statusline=%!InactiveStatus()
 augroup END
 
-function! ShowRGBAImage(path, mode) abort
-    if !filereadable(a:path)
-        echohl ErrorMsg | echom 'File not found: ' . a:path | echohl None
-        return
-    endif
+" image preview / clipboard image paste (Windows only)
+if has('win32')
+    function! ShowRGBAImage(path, mode) abort
+        if !filereadable(a:path)
+            echohl ErrorMsg | echom 'File not found: ' . a:path | echohl None
+            return
+        endif
 
-    let l:cell_w = get(g:, 'popup_image_cell_width',  8)
-    let l:cell_h = get(g:, 'popup_image_cell_height', 16)
+        let l:cell_w = get(g:, 'popup_image_cell_width',  8)
+        let l:cell_h = get(g:, 'popup_image_cell_height', 16)
 
-    if a:mode ==# 'big'
-        let l:win_w = &columns
-        let l:win_h = &lines
-        let l:wr    = 1
-        let l:wc    = 1
-    else
-        let [l:wr, l:wc] = win_screenpos(win_getid())
-        let l:win_w = winwidth(0)
-        let l:win_h = winheight(0) * 2 / 3
-    endif
+        if a:mode ==# 'big'
+            let l:win_w = &columns
+            let l:win_h = &lines
+            let l:wr    = 1
+            let l:wc    = 1
+        else
+            let [l:wr, l:wc] = win_screenpos(win_getid())
+            let l:win_w = winwidth(0)
+            let l:win_h = winheight(0) * 2 / 3
+        endif
 
-    let l:max_px_w = l:win_w * l:cell_w
-    let l:max_px_h = l:win_h * l:cell_h
+        let l:max_px_w = l:win_w * l:cell_w
+        let l:max_px_h = l:win_h * l:cell_h
 
-    let l:resized = tempname() .. '.png'
-    let l:rgba    = tempname() .. '.rgba'
+        let l:resized = tempname() .. '.png'
+        let l:rgba    = tempname() .. '.rgba'
 
-    call system('magick ' .. shellescape(a:path)
-                \ .. ' -resize ' .. shellescape(l:max_px_w .. 'x' .. l:max_px_h .. '>')
-                \ .. ' ' .. shellescape(l:resized))
+        call system('magick ' .. shellescape(a:path)
+                    \ .. ' -resize ' .. shellescape(l:max_px_w .. 'x' .. l:max_px_h .. '>')
+                    \ .. ' ' .. shellescape(l:resized))
 
-    let l:dim = split(system('magick identify -format "%w %h" ' .. shellescape(l:resized)))
-    if len(l:dim) != 2
-        echohl ErrorMsg | echom 'Failed to get image size' | echohl None
+        let l:dim = split(system('magick identify -format "%w %h" ' .. shellescape(l:resized)))
+        if len(l:dim) != 2
+            echohl ErrorMsg | echom 'Failed to get image size' | echohl None
+            call delete(l:resized)
+            return
+        endif
+        let l:w = str2nr(l:dim[0])
+        let l:h = str2nr(l:dim[1])
+
+        call system('magick ' .. shellescape(l:resized) .. ' -alpha on -depth 8 RGBA:' .. shellescape(l:rgba))
         call delete(l:resized)
-        return
-    endif
-    let l:w = str2nr(l:dim[0])
-    let l:h = str2nr(l:dim[1])
 
-    call system('magick ' .. shellescape(l:resized) .. ' -alpha on -depth 8 RGBA:' .. shellescape(l:rgba))
-    call delete(l:resized)
+        if !filereadable(l:rgba)
+            echohl ErrorMsg | echom 'Conversion failed' | echohl None
+            return
+        endif
 
-    if !filereadable(l:rgba)
-        echohl ErrorMsg | echom 'Conversion failed' | echohl None
-        return
-    endif
+        let l:blob = readblob(l:rgba)
+        call delete(l:rgba)
 
-    let l:blob = readblob(l:rgba)
-    call delete(l:rgba)
+        if exists('g:image_popup')
+            call popup_close(g:image_popup)
+            unlet g:image_popup
+        endif
 
-    if exists('g:image_popup')
-        call popup_close(g:image_popup)
-        unlet g:image_popup
-    endif
+        let g:image_popup = popup_create('', #{
+                    \ image:   #{ data: l:blob, width: l:w, height: l:h },
+                    \ line:    l:wr,
+                    \ col:     l:wc + l:win_w - 1,
+                    \ pos:     'topright',
+                    \ fixed:   v:true,
+                    \ border:  [0, 0, 0, 0],
+                    \ padding: [0, 0, 0, 0],
+                    \ })
+    endfunction
 
-    let g:image_popup = popup_create('', #{
-                \ image:   #{ data: l:blob, width: l:w, height: l:h },
-                \ line:    l:wr,
-                \ col:     l:wc + l:win_w - 1,
-                \ pos:     'topright',
-                \ fixed:   v:true,
-                \ border:  [0, 0, 0, 0],
-                \ padding: [0, 0, 0, 0],
-                \ })
-endfunction
+    function! GetFileUnderCursor() abort
+        if &filetype ==# 'netrw'
+            let l:name = substitute(getline('.'), '^\s*', '', '')
+            return b:netrw_curdir . '/' . l:name
+        endif
 
-function! GetFileUnderCursor() abort
-    if &filetype ==# 'netrw'
-        let l:name = substitute(getline('.'), '^\s*', '', '')
-        return b:netrw_curdir . '/' . l:name
-    endif
+        let l:line      = getline('.')
+        let l:col       = col('.') - 1
+        let l:candidate = ''
 
-    let l:line      = getline('.')
-    let l:col       = col('.') - 1
-    let l:candidate = ''
+        for [l:o, l:c] in [['"', '"'], ["'", "'"], ['`', '`']]
+            let l:pat = l:o . '\([^' . l:c . ']\+\)' . l:c
+            let l:idx = 0
+            while 1
+                let l:ms = match(l:line, l:pat, l:idx)
+                if l:ms < 0 | break | endif
+                let l:me = matchend(l:line, l:pat, l:idx)
+                if l:ms < l:col && l:col < l:me - 1
+                    let l:candidate = matchstr(l:line, l:pat)[1:-2]
+                    break
+                endif
+                let l:idx = l:me
+            endwhile
+            if !empty(l:candidate) | break | endif
+        endfor
 
-    for [l:o, l:c] in [['"', '"'], ["'", "'"], ['`', '`']]
-        let l:pat = l:o . '\([^' . l:c . ']\+\)' . l:c
-        let l:idx = 0
-        while 1
-            let l:ms = match(l:line, l:pat, l:idx)
-            if l:ms < 0 | break | endif
-            let l:me = matchend(l:line, l:pat, l:idx)
-            if l:ms < l:col && l:col < l:me - 1
-                let l:candidate = matchstr(l:line, l:pat)[1:-2]
-                break
-            endif
-            let l:idx = l:me
-        endwhile
-        if !empty(l:candidate) | break | endif
-    endfor
+        if empty(l:candidate)
+            let l:candidate = expand('<cfile>')
+        endif
 
-    if empty(l:candidate)
-        let l:candidate = expand('<cfile>')
-    endif
+        " 1. Try as-is (absolute path or relative to :pwd)
+        if filereadable(l:candidate)
+            return l:candidate
+        endif
 
-    " 1. Try as-is (absolute path or relative to :pwd)
-    if filereadable(l:candidate)
+        " 2. Try relative to the current file's directory
+        let l:rel = expand('%:p:h') . '/' . l:candidate
+        if filereadable(l:rel)
+            return l:rel
+        endif
+
+        " Return original and let the caller report the error
         return l:candidate
-    endif
+    endfunction
 
-    " 2. Try relative to the current file's directory
-    let l:rel = expand('%:p:h') . '/' . l:candidate
-    if filereadable(l:rel)
-        return l:rel
-    endif
-
-    " Return original and let the caller report the error
-    return l:candidate
-endfunction
-
-nnoremap <silent> <leader>i :call ShowRGBAImage(fnamemodify(GetFileUnderCursor(), ':p'), 'small')<CR>
-nnoremap <silent> <leader>I :call ShowRGBAImage(fnamemodify(GetFileUnderCursor(), ':p'), 'big')<CR>
+    nnoremap <silent> <leader>i :call ShowRGBAImage(fnamemodify(GetFileUnderCursor(), ':p'), 'small')<CR>
+    nnoremap <silent> <leader>I :call ShowRGBAImage(fnamemodify(GetFileUnderCursor(), ':p'), 'big')<CR>
+endif
 
 
 "C:\Users\NeuschmidF\Pictures\Screenshots\Screenshot_2026-02-03_161158.png
@@ -716,44 +718,46 @@ function! FindProjectRoot()
     endif
 endfunction
 
-function! s:PasteImageFromClipboard() abort
-    let l:buf_dir = expand('%:p:h')
-    if empty(l:buf_dir) | let l:buf_dir = getcwd() | endif
+if has('win32')
+    function! s:PasteImageFromClipboard() abort
+        let l:buf_dir = expand('%:p:h')
+        if empty(l:buf_dir) | let l:buf_dir = getcwd() | endif
 
-    let l:img_dir  = l:buf_dir . '\assets'
-    let l:img_name = 'screenshot_' . strftime('%Y%m%d_%H%M%S') . '.png'
-    let l:img_path = l:img_dir . '\' . l:img_name
+        let l:img_dir  = l:buf_dir . '\assets'
+        let l:img_name = 'screenshot_' . strftime('%Y%m%d_%H%M%S') . '.png'
+        let l:img_path = l:img_dir . '\' . l:img_name
 
-    " Write a PS1 script to avoid shell-escaping nightmares
-    let l:ps = tempname() . '.ps1'
-    call writefile([
-                \ 'Add-Type -AssemblyName System.Windows.Forms',
-                \ 'if (-not [System.Windows.Forms.Clipboard]::ContainsImage()) { exit 1 }',
-                \ 'New-Item -ItemType Directory -Force -Path "' . l:img_dir . '" | Out-Null',
-                \ '[System.Windows.Forms.Clipboard]::GetImage().Save("' . l:img_path . '")',
-                \ ], l:ps)
-    call system('powershell -NoProfile -ExecutionPolicy Bypass -File ' . shellescape(l:ps))
-    call delete(l:ps)
+        " Write a PS1 script to avoid shell-escaping nightmares
+        let l:ps = tempname() . '.ps1'
+        call writefile([
+                    \ 'Add-Type -AssemblyName System.Windows.Forms',
+                    \ 'if (-not [System.Windows.Forms.Clipboard]::ContainsImage()) { exit 1 }',
+                    \ 'New-Item -ItemType Directory -Force -Path "' . l:img_dir . '" | Out-Null',
+                    \ '[System.Windows.Forms.Clipboard]::GetImage().Save("' . l:img_path . '")',
+                    \ ], l:ps)
+        call system('powershell -NoProfile -ExecutionPolicy Bypass -File ' . shellescape(l:ps))
+        call delete(l:ps)
 
-    if v:shell_error != 0
-        echom 'No image in clipboard'
-        return ''
-    endif
+        if v:shell_error != 0
+            echom 'No image in clipboard'
+            return ''
+        endif
 
-    return '![](assets/' . l:img_name . ')'
-endfunction
+        return '![](assets/' . l:img_name . ')'
+    endfunction
 
-function! s:PasteImageNormal() abort
-    let l:md = s:PasteImageFromClipboard()
-    if empty(l:md) | return | endif
-    call append(line('.'), l:md)
-    normal! j
-endfunction
+    function! s:PasteImageNormal() abort
+        let l:md = s:PasteImageFromClipboard()
+        if empty(l:md) | return | endif
+        call append(line('.'), l:md)
+        normal! j
+    endfunction
 
-augroup markdown_paste_image
-    autocmd!
-    autocmd FileType markdown nnoremap <buffer> <silent> <leader>p  :call <SID>PasteImageNormal()<CR>
-    autocmd FileType markdown inoremap <buffer> <silent> <C-g>p     <C-R>=<SID>PasteImageFromClipboard()<CR>
-augroup END
+    augroup markdown_paste_image
+        autocmd!
+        autocmd FileType markdown nnoremap <buffer> <silent> <leader>p  :call <SID>PasteImageNormal()<CR>
+        autocmd FileType markdown inoremap <buffer> <silent> <C-g>p     <C-R>=<SID>PasteImageFromClipboard()<CR>
+    augroup END
+endif
 
 let g:netrw_hide=0
