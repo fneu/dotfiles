@@ -151,6 +151,7 @@ if has("gui_running")
     set guifont=Berkeley\ Mono:h11
     if has("win32")
         " set renderoptions=type:directx
+        set renderoptions=type:directx,renmode:5,taamode:1,geom:1
     endif
 endif
 set guioptions-=m                   " menu bar
@@ -424,7 +425,7 @@ function! s:ToggleSideTerm() abort
     if !bufexists(l:buf)
         execute 'botright vertical terminal ++kill=term ++cols=' . l:width
         let s:side_term_buf = bufnr('%')
-        setlocal nobuflisted nolist nonumber norelativenumber winfixwidth
+        setlocal nobuflisted nolist nonumber norelativenumber winfixwidth nowrap scrolloff=0
         return
     endif
     let l:win = bufwinnr(l:buf)
@@ -441,7 +442,7 @@ function! s:ToggleSideTerm() abort
     else
         execute 'botright vertical ' . l:width . 'split'
         execute 'buffer ' . l:buf
-        setlocal winfixwidth
+        setlocal winfixwidth nowrap scrolloff=0
     endif
 endfunction
 nnoremap <silent> <leader>aa :call <SID>ToggleSideTerm()<CR>
