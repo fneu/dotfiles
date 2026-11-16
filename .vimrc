@@ -53,9 +53,12 @@ Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 Plug 'HerringtonDarkholme/yats.vim' " TypeScript Syntax
 Plug 'othree/html5.vim'             " Html5 Syntax
 Plug 'othree/yajs.vim'              " JavaScript Syntax
-if has('win32')
-    Plug 'OmniSharp/omnisharp-vim'  " C# IDE features via OmniSharp-roslyn
-endif
+" omnisharp-vim retired: OmniSharp-roslyn is incompatible with the VS2026 / .NET 10
+" MSBuild on this machine (TypeLoadException on every project load). C# now uses
+" csharp-ls (Roslyn-based) through ALE instead. See the C# section further down.
+" if has('win32')
+"     Plug 'OmniSharp/omnisharp-vim'  " C# IDE features via OmniSharp-roslyn
+" endif
 " completion / LSP
 Plug 'dense-analysis/ale'
 
@@ -520,9 +523,7 @@ let g:ale_linters = {
         \ 'html' : ['angular'],
         \ 'typescript': ['tsserver', 'eslint'],
         \}
-if has('win32')
-    let g:ale_linters.cs = ['OmniSharp']
-endif
+let g:ale_linters.cs = ['csharp_ls']
 let g:ale_fixers = {
         \ 'python': ['black', 'ruff'],
         \ 'haskell': ['fourmolu'],
@@ -594,49 +595,55 @@ augroup END
 
 
 
-" OmniSharp / C# (Windows only)
-if has('win32')
-    let g:OmniSharp_server_use_net6 = 1          " use net6+ build of OmniSharp-roslyn
-    let g:OmniSharp_selector_ui = 'fzf'          " use fzf for code-actions / find-symbol
-    let g:OmniSharp_selector_findusages = 'fzf'
-    let g:OmniSharp_popup = 0                    " use preview window (like ALE), stays open until <C-l>
+" C# via csharp-ls (Roslyn-based language server) through ALE.
+" OmniSharp-roslyn is unusable here: it loads the VS2026 / .NET 10 MSBuild and
+" throws TypeLoadException on every project. csharp-ls speaks plain stdio LSP,
+" auto-discovers the .slnx/.sln solution, and plugs into ALE so the global LSP
+" bindings (gd, gi, K, <leader>rn, g., gI, gA, gh, <leader>s, [d, ]d) work in C#
+" exactly like every other language. Install once with:
+"     dotnet tool install --global csharp-ls
+"
+" Resolve the folder csharp-ls should treat as the workspace: the directory
+" holding the solution (.slnx/.sln), else the nearest .csproj, else the git root.
+function! CsharpLsProjectRoot(buffer) abort
+    let l:start = fnamemodify(bufname(a:buffer), ':p:h')
+    for l:pat in ['*.slnx', '*.sln', '*.csproj']
+        let l:dir = l:start
+        while 1
+            if !empty(glob(l:dir . '/' . l:pat))
+                return l:dir
+            endif
+            let l:parent = fnamemodify(l:dir, ':h')
+            if l:parent ==# l:dir
+                break
+            endif
+            let l:dir = l:parent
+        endwhile
+    endfor
+    let l:git = finddir('.git', l:start . ';')
+    return empty(l:git) ? l:start : fnamemodify(l:git, ':h')
+endfunction
 
-    let g:OmniSharp_server_path = $HOME.'\bin\omnisharp-win-x64\OmniSharp.exe'
+if executable('csharp-ls') || filereadable(expand('~/.dotnet/tools/csharp-ls.exe'))
+    let s:csharp_ls = executable('csharp-ls')
+        \ ? 'csharp-ls'
+        \ : expand('~/.dotnet/tools/csharp-ls.exe')
 
-    " Buffer-local C# bindings that mirror the global ALE LSP bindings so the
-    " same muscle-memory works in C# (via OmniSharp) and every other language
-    " (via ALE) without any conflict.
-    augroup omnisharp_commands
-        autocmd!
-
-        " --- mirror global LSP bindings ---
-        autocmd FileType cs nmap <silent> <buffer> gd  <Plug>(omnisharp_go_to_definition)
-        autocmd FileType cs nmap <silent> <buffer> K   <Plug>(omnisharp_documentation)
-        autocmd FileType cs nmap <silent> <buffer> <leader>rn  <Plug>(omnisharp_rename)
-        autocmd FileType cs nmap <silent> <buffer> g.  <Plug>(omnisharp_code_actions)
-        autocmd FileType cs xmap <silent> <buffer> g.  <Plug>(omnisharp_code_actions)
-        autocmd FileType cs nmap <silent> <buffer> gI  <Plug>(omnisharp_fix_usings)
-        autocmd FileType cs nmap <silent> <buffer> gA  <Plug>(omnisharp_find_usages)
-        autocmd FileType cs nmap <silent> <buffer> gh  <Plug>(omnisharp_type_lookup)
-        autocmd FileType cs nmap <silent> <buffer> <leader>gq  <Plug>(omnisharp_code_format)
-
-        " --- OmniSharp extras ---
-        autocmd FileType cs nmap <silent> <buffer> gi <Plug>(omnisharp_find_implementations)
-        autocmd FileType cs nmap <silent> <buffer> <leader>s <Plug>(omnisharp_find_symbol)
-
-        " navigate by method/property (mirrors ö/ä → [[ / ]] on German layout)
-        autocmd FileType cs nmap <silent> <buffer> [[ <Plug>(omnisharp_navigate_up)
-        autocmd FileType cs nmap <silent> <buffer> ]] <Plug>(omnisharp_navigate_down)
-
-        " auto type-lookup on cursor-hold
-        autocmd CursorHold *.cs OmniSharpTypeLookup
-
-        " --- test running: override vim-test bindings with OmniSharp commands ---
-        autocmd FileType cs nmap <silent> <buffer> <leader>tn :OmniSharpRunTest<CR>
-        autocmd FileType cs nmap <silent> <buffer> <leader>tf :OmniSharpRunTestsInFile<CR>
-        autocmd FileType cs nmap <silent> <buffer> <leader>td :OmniSharpDebugTest<CR>
-    augroup END
+    call ale#linter#Define('cs', {
+        \   'name': 'csharp_ls',
+        \   'lsp': 'stdio',
+        \   'lsp_config': {},
+        \   'executable': s:csharp_ls,
+        \   'command': '%e',
+        \   'project_root': function('CsharpLsProjectRoot'),
+        \ })
 endif
+
+" Test running (<leader>tn/tf/ta/tl) falls back to the global vim-test mappings,
+" which use the dotnet test runner for C#. Debugging uses vimspector (F5 etc.).
+" Note vs. omnisharp-vim: csharp-ls has no [[/]] method navigation, and ALE has
+" no LSP format command, so <leader>gq (ALEFix) does nothing for C# unless a cs
+" fixer is added; use the g. code action "Format Document" instead.
 
 
 " Vimspector
