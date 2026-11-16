@@ -343,6 +343,18 @@ augroup review_qf
     autocmd FileType qf nnoremap <buffer> <silent> <CR> :call <SID>QfEnter()<CR>
 augroup END
 
+" step through the fugitive status window: go there, ) / (, dv (section-aware diff)
+function! s:GotoStatusWin() abort
+    for l:w in range(1, winnr('$'))
+        if getbufvar(winbufnr(l:w), '&filetype') ==# 'fugitive'
+            execute l:w . 'wincmd w'
+            return
+        endif
+    endfor
+endfunction
+nmap <silent> <Leader>gn :<C-U>call <SID>GotoStatusWin()<CR>)dv
+nmap <silent> <Leader>gp :<C-U>call <SID>GotoStatusWin()<CR>(dv
+
 function! s:GBranchesHandler(branch) abort
     let l:branch = substitute(a:branch, '^\*\?\s\+\(remotes/[^/]\+/\)\?', '', '')
     execute 'Git checkout ' . l:branch
