@@ -6,8 +6,14 @@ syntax enable
 " VIM-PLUG
 " automatic install on first use
 if empty(glob('~/.vim/autoload/plug.vim'))
+    " fall back to git if raw.githubusercontent.com is blocked (e.g. by a proxy)
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        \ || (rm -rf ~/.vim/plug-src
+        \ && git clone --depth 1 https://github.com/junegunn/vim-plug.git ~/.vim/plug-src
+        \ && mkdir -p ~/.vim/autoload
+        \ && cp ~/.vim/plug-src/plug.vim ~/.vim/autoload/plug.vim
+        \ && rm -rf ~/.vim/plug-src)
     autocmd VimEnter * PlugInstall --sync | source ~/.vimrc
     let g:first_use = "yes"
 endif
